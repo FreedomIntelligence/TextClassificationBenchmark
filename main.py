@@ -21,7 +21,10 @@ from torchtext import data
 from torchtext import datasets
 from torchtext.vocab import Vectors, GloVe, CharNGram, FastText
 from torch.nn.modules.loss import NLLLoss
+import os
 
+if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 opt = opts.parse_opt()
 opt.model ='lstm'
 
