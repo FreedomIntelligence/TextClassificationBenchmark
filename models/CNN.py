@@ -35,12 +35,12 @@ class CNN(nn.Module):
 
         for i in range(len(self.FILTERS)):
             conv = nn.Conv1d(self.IN_CHANNEL, self.FILTER_NUM[i], self.WORD_DIM * self.FILTERS[i], stride=self.WORD_DIM)
-            setattr(self, f'conv_{i}', conv)
+            setattr(self, 'conv_%d'%i, conv)
 
         self.fc = nn.Linear(sum(self.FILTER_NUM), self.CLASS_SIZE)
 
     def get_conv(self, i):
-        return getattr(self, f'conv_{i}')
+        return getattr(self, 'conv_%d'%i)
 
     def forward(self, inp):
         x = self.embedding(inp).view(-1, 1, self.WORD_DIM * self.MAX_SENT_LEN)
@@ -56,7 +56,6 @@ class CNN(nn.Module):
         x = torch.cat(conv_results, 1)
         x = F.dropout(x, p=self.DROPOUT_PROB, training=self.training)
         x = self.fc(x)
-
         return x
 
 
