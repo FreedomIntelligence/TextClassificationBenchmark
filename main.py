@@ -29,6 +29,8 @@ opt.model ='lstm'
 
 train_iter, test_iter = utils.loadData(opt)
 model=models.setup(opt)
+if torch.cuda.is_available():
+    model.cuda()
 model.train()
 optimizer = optim.Adam(model.parameters(), lr=opt.learning_rate)
 optimizer.zero_grad()
