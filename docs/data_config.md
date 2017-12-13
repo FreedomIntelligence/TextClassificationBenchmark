@@ -29,7 +29,7 @@ Others are planned or a work in progress:
 
 - [IMDB](http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz)数据集下载到 .data/imdb
 - [SST](http://nlp.stanford.edu/sentiment/trainDevTestTrees_PTB.zip)数据集下载到.data/sst
-- TREC [1]('http://cogcomp.org/Data/QA/QC/train_5500.label') [2](http://cogcomp.org/Data/QA/QC/TREC_10.label) 问题分类数据集下载到.data/imdb
+- TREC [1](http://cogcomp.org/Data/QA/QC/train_5500.label) [2](http://cogcomp.org/Data/QA/QC/TREC_10.label) 问题分类数据集下载到.data/imdb
 
 ###文件结构示例如下
 
