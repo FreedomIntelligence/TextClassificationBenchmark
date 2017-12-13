@@ -1,6 +1,6 @@
 # Windows 平台安装 PyTorch
 
-如果是Linux，Mac安装直接移步pytorch[主页](http://pytorch.org/)
+如果是Linux，Mac安装直接移步pytorch[主页](http://pytorch.org/), 再安装TorchText
 
 ##Python安装
 建议直接安装anaconda的[安装包](https://repo.continuum.io/archive/Anaconda3-5.0.1-Windows-x86_64.exe)
