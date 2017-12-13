@@ -31,3 +31,12 @@ CNN
 
 LSTM
 <pre><code>python main.py -model lstm</code></pre>
+
+###Contributor
+-	[@Allenzhai](https://github.com/zhaizheng)
+-	[@JareWei](https://github.com/jacobwei)
+-	[@AlexMeng](https://github.com/EdwardLorenz)
+-	[@Lilianwang](https://github.com/WangLilian)
+-	[@Wabywang](https://github.com/Wabyking)
+
+Welcome your issues and contribution!!!
