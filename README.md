@@ -37,6 +37,7 @@ LSTM
 -	[@JareWei](https://github.com/jacobwei)
 -	[@AlexMeng](https://github.com/EdwardLorenz)
 -	[@Lilianwang](https://github.com/WangLilian)
+-	[@ZhanSu](https://github.com/shuishen112)
 -	[@Wabywang](https://github.com/Wabyking)
 
 Welcome your issues and contribution!!!
