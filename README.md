@@ -17,7 +17,7 @@ torch
 torchtext
 </pre>
 
-第二你可能需要把数据配置好， 数据配置
+第二你可能需要把数据配置好，[数据配置](docs/data_config.md)
 包括
 <pre>
 Glove词向量
