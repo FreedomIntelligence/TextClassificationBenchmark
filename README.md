@@ -10,6 +10,19 @@ A Benchmark of Text Classification in PyTorch
 
 在这样一个benchmark上做一些基础方法的比较
 
+首先你可能需要安装一些基础的库 [安装库](docs/windows_torch.md)
+<pre>
+python3
+torch
+torchtext
+</pre>
+
+第二你可能需要把数据配置好， 数据配置
+包括
+<pre>
+Glove词向量
+情感文本分类数据集IMDB
+</pre>
 跑默认配置
 <pre><code>python main.py</code></pre>
 
