@@ -9,3 +9,12 @@ A Benchmark of Text Classification in PyTorch
 
 
 在这样一个benchmark上做一些基础方法的比较
+
+跑默认配置
+<pre><code>python main.py</code></pre>
+
+CNN 
+<pre><code>python main.py -model cnn</code></pre>
+
+LSTM
+<pre><code>python main.py -model lstm</code></pre>
