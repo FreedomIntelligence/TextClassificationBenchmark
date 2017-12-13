@@ -36,3 +36,12 @@ def loadData(opt):
     opt.embeddings = TEXT.vocab.vectors
     
     return train_iter, test_iter
+
+def evaluation(model,test_iter):
+    accuracy=[]
+    for batch in test_iter.__iter__():
+        predicted = model(batch.text[0])
+        percision = predicted == predicted
+        accuracy.append(sum(percision)*1.0/len(percision) )
+    return np.mean(accuracy)
+    

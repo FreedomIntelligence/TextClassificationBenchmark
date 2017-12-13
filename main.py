@@ -35,8 +35,7 @@ optimizer.zero_grad()
 loss_fun = NLLLoss()
 
 for batch in train_iter.__iter__():
-
-
+    
     predicted = model(batch.text[0])
 
     loss = loss_fun(predicted,batch.label)
@@ -44,7 +43,11 @@ for batch in train_iter.__iter__():
     utils.clip_gradient(optimizer, opt.grad_clip)
     optimizer.step()
     print("loss : %.5f" % loss.data.numpy()[0])
+    
+utils.evaluation(model,test_iter)
 
+
+        
 
 
 
