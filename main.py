@@ -31,13 +31,7 @@ def getDataIterator(opt):
     LABEL = data.Field(sequential=False)
 
     train, test = datasets.IMDB.splits(TEXT, LABEL)
-   
-    # print information about the data
-#    print('train.fields', train.fields)
-#    print('len(train)', len(train))
-#    print('vars(train[0])', vars(train[0]))
-    
-    # build the vocabulary
+
     TEXT.build_vocab(train, vectors=GloVe(name='6B', dim=300))
     LABEL.build_vocab(train)    
     # print vocab information
