@@ -15,7 +15,7 @@
 ## TorchText 安装
 
 前提是有git和pip，如果没有需要下载git，并将其放到Path环境变量里
-
+<pre><code>pip install git+https://github.com/pytorch/text.git </code></pre>
 
 还需要有代理的话
 <pre><code>pip install git+https://github.com/pytorch/text.git --proxy dev-proxy.oa.com:8080 </code></pre>
