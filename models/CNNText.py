@@ -26,7 +26,7 @@ class CNNText(nn.Module):
 #            nn.AdaptiveMaxPool1d()
         )
 
-        self.fc = nn.Linear(self.content_dim, opt.num_classes)
+        self.fc = nn.Linear(self.content_dim, opt.label_size)
 
 
     def forward(self,  content):
