@@ -17,7 +17,7 @@ def loadData(opt):
 
     device = 0 if  torch.cuda.is_available()  else -1
 
-    TEXT = data.Field(lower=True, include_lengths=True, batch_first=True,fix_length=100)
+    TEXT = data.Field(lower=True, include_lengths=True, batch_first=True,fix_length=opt.max_seq_len)
     LABEL = data.Field(sequential=False)
 
     train, test = datasets.IMDB.splits(TEXT, LABEL)
@@ -34,6 +34,7 @@ def loadData(opt):
     opt.vocab_size = len(TEXT.vocab)
     opt.embedding_dim= TEXT.vocab.vectors.size()[1]
     opt.embeddings = TEXT.vocab.vectors
+
     
     return train_iter, test_iter
 

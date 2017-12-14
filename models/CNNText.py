@@ -22,7 +22,7 @@ class CNNText(nn.Module):
                       out_channels = self.content_dim,
                       kernel_size = self.kernel_size),
             nn.ReLU(),
-            nn.MaxPool1d(kernel_size = (opt.content_seq_len - self.kernel_size + 1))
+            nn.MaxPool1d(kernel_size = (opt.max_seq_len - self.kernel_size + 1))
 #            nn.AdaptiveMaxPool1d()
         )
 
@@ -65,7 +65,7 @@ def parse_opt():
     args.kernel_size=3
     args.num_classes=3
     args.content_dim=256
-    args.content_seq_len=50
+    args.max_seq_len=50
     
 #
 #    # Check if args are valid

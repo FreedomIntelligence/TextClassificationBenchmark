@@ -5,7 +5,9 @@ def parse_opt():
     parser.add_argument('--hidden_dim', type=int, default=128,
                     help='hidden_dim')   
     
-    
+
+    parser.add_argument('--max_seq_len', type=int, default=100,
+                    help='max_seq_len')
     parser.add_argument('--batch_size', type=int, default=64,
                     help='batch_size')
     parser.add_argument('--embedding_dim', type=int, default=300,
