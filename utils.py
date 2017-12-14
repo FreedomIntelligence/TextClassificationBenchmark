@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from torchtext import data
 from torchtext import datasets
 from torchtext.vocab import Vectors, GloVe, CharNGram, FastText
-
+import numpy as np
 
 def clip_gradient(optimizer, grad_clip):
     for group in optimizer.param_groups:
@@ -17,7 +17,7 @@ def loadData(opt):
 
     device = 0 if  torch.cuda.is_available()  else -1
 
-    TEXT = data.Field(lower=True, include_lengths=True, batch_first=True)
+    TEXT = data.Field(lower=True, include_lengths=True, batch_first=True,fix_length=100)
     LABEL = data.Field(sequential=False)
 
     train, test = datasets.IMDB.splits(TEXT, LABEL)

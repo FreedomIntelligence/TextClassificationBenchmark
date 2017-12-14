@@ -20,7 +20,7 @@ import torch.nn.functional as F
 from torchtext import data
 from torchtext import datasets
 from torchtext.vocab import Vectors, GloVe, CharNGram, FastText
-from torch.nn.modules.loss import NLLLoss
+from torch.nn.modules.loss import NLLLoss,MultiLabelSoftMarginLoss,MultiLabelMarginLoss,BCELoss
 import os
 
 if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
@@ -28,9 +28,8 @@ if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
 opt = opts.parse_opt()
 opt.model ='lstm'
 
-
-
 train_iter, test_iter = utils.loadData(opt)
+
 model=models.setup(opt)
 if torch.cuda.is_available():
     model.cuda()
@@ -38,6 +37,7 @@ model.train()
 optimizer = optim.Adam(model.parameters(), lr=opt.learning_rate)
 optimizer.zero_grad()
 loss_fun = NLLLoss()
+
 
 for batch in train_iter.__iter__():
     

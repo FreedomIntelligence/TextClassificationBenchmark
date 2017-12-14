@@ -34,7 +34,8 @@ class LSTMClassifier(nn.Module):
     def forward(self, sentence):
         embeds = self.word_embeddings(sentence)
 
-        x = embeds.view(sentence.size()[1], self.batch_size, -1)
+#        x = embeds.view(sentence.size()[1], self.batch_size, -1)
+        x=embeds.permute(1,0,2)
         self.hidden= self.init_hidden()
         lstm_out, self.hidden = self.lstm(x, self.hidden)
         y  = self.hidden2label(lstm_out[-1])
@@ -59,6 +60,7 @@ class LSTMClassifier(nn.Module):
 #        
 #        
 ##        x= Variable(torch.zeros(30, 128, 300))
-#        embeds=embeds.view(sentence.size()[1],sentence.size()[0],-1)
+#        x = embeds.view(sentence.size()[1], self.batch_size, -1)
+#        embeds=embeds.permute(1,0,2)
 #        lstm_out, hidden = lstm(embeds, hidden)
 #                  
