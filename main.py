@@ -38,8 +38,10 @@ optimizer = optim.Adam(model.parameters(), lr=opt.learning_rate)
 optimizer.zero_grad()
 loss_fun = NLLLoss()
 
-batch = next(iter(train_iter))
-for batch in train_iter.__iter__():
+#batch = next(iter(train_iter))
+for index,batch in enumerate(train_iter):
+    if index%1000==0:
+        print(index)
 
     if len(batch.text[0]) == opt.batch_size:
         predicted = model(batch.text[0])
