@@ -40,19 +40,19 @@ loss_fun = NLLLoss()
 
 batch = next(iter(train_iter))
 for batch in train_iter.__iter__():
-    
+    print(batch.text[0].size())  
     predicted = model(batch.text[0])
-    if len(batch.text[0]) == opt.batch_size:
-        
-        loss = loss_fun(predicted,batch.label)
-        loss.backward()
-        utils.clip_gradient(optimizer, opt.grad_clip)
-        optimizer.step()
-        if  torch.cuda.is_available():
-            print("loss : %.5f" % loss.cpu().data.numpy()[0])
-        else:
-            print("loss : %.5f" % loss.data.numpy()[0])
-    
+
+
+    loss = loss_fun(predicted,batch.label)
+    loss.backward()
+    utils.clip_gradient(optimizer, opt.grad_clip)
+    optimizer.step()
+    if  torch.cuda.is_available():
+        print("loss : %.5f" % loss.cpu().data.numpy()[0])
+    else:
+        print("loss : %.5f" % loss.data.numpy()[0])
+
 utils.evaluation(model,test_iter)
 
 
