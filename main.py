@@ -43,18 +43,18 @@ for index,batch in enumerate(train_iter):
     if index%1000==0:
         print(index)
 
-    if len(batch.text[0]) == opt.batch_size:
-        predicted = model(batch.text[0])
-    
-    
-        loss = loss_fun(predicted,batch.label)
-        loss.backward()
-        utils.clip_gradient(optimizer, opt.grad_clip)
-        optimizer.step()
-        if  torch.cuda.is_available():
-            print("loss : %.5f" % loss.cpu().data.numpy()[0])
-        else:
-            print("loss : %.5f" % loss.data.numpy()[0])
+
+    predicted = model(batch.text[0])
+
+
+    loss = loss_fun(predicted,batch.label)
+    loss.backward()
+    utils.clip_gradient(optimizer, opt.grad_clip)
+    optimizer.step()
+    if  torch.cuda.is_available():
+        print("loss : %.5f" % loss.cpu().data.numpy()[0])
+    else:
+        print("loss : %.5f" % loss.data.numpy()[0])
 
 utils.evaluation(model,test_iter)
 
