@@ -38,11 +38,12 @@ optimizer = optim.Adam(model.parameters(), lr=opt.learning_rate)
 optimizer.zero_grad()
 loss_fun = NLLLoss()
 
-
+batch = next(iter(train_iter))
 for batch in train_iter.__iter__():
     
     predicted = model(batch.text[0])
-
+    if len(batch.text[0]) != opt.batch_size:
+        continue
     loss = loss_fun(predicted,batch.label)
     loss.backward()
     utils.clip_gradient(optimizer, opt.grad_clip)
