@@ -42,7 +42,7 @@ loss_fun = BCELoss()
 #batch = next(iter(train_iter))
 #print(utils.evaluation(model,test_iter))
 for i in range(10):
-    for index,batch in enumerate(train_iter):
+    for epoch,batch in enumerate(train_iter):
     
         predicted = model(batch.text[0])
     
@@ -51,13 +51,13 @@ for i in range(10):
         loss.backward()
         utils.clip_gradient(optimizer, opt.grad_clip)
         optimizer.step()
-#        if index% 32==0:
-#            if  torch.cuda.is_available():
-#                print("loss : %.5f" % loss.cpu().data.numpy()[0])
-#            else:
-#                print("loss : %.5f" % loss.data.numpy()[0])
+        if epoch% 100==0:
+            if  torch.cuda.is_available():
+                print("%d ieration %d epoch with loss : %.5f" % (i,epoch,loss.cpu().data.numpy()[0]))
+            else:
+                print("%d ieration %d epoch with loss : %.5f" % (i,epoch,loss.data.numpy()[0]))
     percision=utils.evaluation(model,test_iter)
-    print("%d ieration with percision %.4f" % percision)
+    print("%d ieration with percision %.4f" % (i,percision))
 
 
         
