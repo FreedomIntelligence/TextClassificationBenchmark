@@ -40,10 +40,8 @@ optimizer.zero_grad()
 loss_fun = BCELoss()
 
 #batch = next(iter(train_iter))
+print(utils.evaluation(model,test_iter))
 for index,batch in enumerate(train_iter):
-    if index%1000==0:
-        print(index)
-
 
     predicted = model(batch.text[0])
 
@@ -57,12 +55,13 @@ for index,batch in enumerate(train_iter):
     loss.backward()
     utils.clip_gradient(optimizer, opt.grad_clip)
     optimizer.step()
-    if  torch.cuda.is_available():
-        print("loss : %.5f" % loss.cpu().data.numpy()[0])
-    else:
-        print("loss : %.5f" % loss.data.numpy()[0])
+    if index% 32==0:
+        if  torch.cuda.is_available():
+            print("loss : %.5f" % loss.cpu().data.numpy()[0])
+        else:
+            print("loss : %.5f" % loss.data.numpy()[0])
 
-utils.evaluation(model,test_iter)
+print(utils.evaluation(model,test_iter))
 
 
         
