@@ -28,7 +28,7 @@ def loadData(opt):
     print('len(TEXT.vocab)', len(TEXT.vocab))
     print('TEXT.vocab.vectors.size()', TEXT.vocab.vectors.size())
 
-    train_iter, test_iter = data.BucketIterator.splits((train, test), batch_size=opt.batch_size,device=device,repeat=False)
+    train_iter, test_iter = data.BucketIterator.splits((train, test), batch_size=opt.batch_size,device=device,repeat=False,shuffle=True)
 
     opt.label_size= len(LABEL.vocab)    
     opt.vocab_size = len(TEXT.vocab)

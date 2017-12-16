@@ -12,7 +12,7 @@ def parse_opt():
                     help='batch_size')
     parser.add_argument('--embedding_dim', type=int, default=300,
                     help='embedding_dim')
-    parser.add_argument('--learning_rate', type=float, default=4e-4,
+    parser.add_argument('--learning_rate', type=float, default=1e-4,
                     help='learning_rate')
     parser.add_argument('--grad_clip', type=float, default=1e-1,
                     help='grad_clip')

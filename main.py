@@ -47,22 +47,17 @@ for i in range(10):
         predicted = model(batch.text[0])
     
         loss= F.cross_entropy(predicted,batch.label)
-    #    y_onehot = torch.from_numpy(y_onehot)
-    #    y_onehot = torch.FloatTensor(predicted.size())
-    #    y_onehot.zero_()
-    #    ones=torch.ones(batch.label.size())
-    #    y_onehot.scatter_(1, batch.label.data, 1)
-    #    loss = loss_fun(predicted,batch.label)
+
         loss.backward()
         utils.clip_gradient(optimizer, opt.grad_clip)
         optimizer.step()
-        if index% 32==0:
-            if  torch.cuda.is_available():
-                print("loss : %.5f" % loss.cpu().data.numpy()[0])
-            else:
-                print("loss : %.5f" % loss.data.numpy()[0])
-
-    print(utils.evaluation(model,test_iter))
+#        if index% 32==0:
+#            if  torch.cuda.is_available():
+#                print("loss : %.5f" % loss.cpu().data.numpy()[0])
+#            else:
+#                print("loss : %.5f" % loss.data.numpy()[0])
+    percision=utils.evaluation(model,test_iter)
+    print("%d ieration with percision %.4f" % percision)
 
 
         
