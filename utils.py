@@ -50,7 +50,5 @@ def evaluation(model,test_iter):
             accuracy.append(percision.data.cpu().numpy()[0] )
         else:
             accuracy.append(percision.data.numpy()[0] )
-        if index>10:
-            break;
     return np.mean(accuracy)
     
