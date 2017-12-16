@@ -40,7 +40,7 @@ optimizer.zero_grad()
 loss_fun = BCELoss()
 
 #batch = next(iter(train_iter))
-print(utils.evaluation(model,test_iter))
+#print(utils.evaluation(model,test_iter))
 for index,batch in enumerate(train_iter):
 
     predicted = model(batch.text[0])

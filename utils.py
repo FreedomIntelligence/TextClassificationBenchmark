@@ -46,8 +46,10 @@ def evaluation(model,test_iter):
         prob, idx = torch.max(predicted, 1) 
         percision=(idx== batch.label).float().mean()
         
-
-        accuracy.append(percision.data.numpy()[0] )
+        if torch.cuda.is_available():
+            accuracy.append(percision.data.numpy()[0] )
+        else:
+            accuracy.append(percision.cpu().data.numpy()[0] )
         if index>10:
             break;
     return np.mean(accuracy)
