@@ -40,9 +40,15 @@ def loadData(opt):
 
 def evaluation(model,test_iter):
     accuracy=[]
+    batch= next(iter(test_iter))
     for index,batch in enumerate( test_iter):
         predicted = model(batch.text[0])
-        percision = predicted == predicted
-        accuracy.append(sum(percision)/len(percision) )
+        prob, idx = torch.max(predicted, 1) 
+        percision=(idx== batch.label).float().mean()
+        
+
+        accuracy.append(percision.data.numpy()[0] )
+        if index>10:
+            break;
     return np.mean(accuracy)
     
