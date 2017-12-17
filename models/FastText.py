@@ -36,3 +36,15 @@ class FastText(nn.Module):
         out=self.content_fc(content_.view(content_.size(0),-1))
 
         return out
+if __name__ == '__main__':
+    import sys
+    sys.path.append(r"..")
+    import opts
+    opt=opts.parse_opt()
+    opt.vocab_size=2501
+    opt.label_size=3
+    m = FastText(opt)
+
+    content = t.autograd.Variable(t.arange(0,2500).view(10,250)).long()
+    o = m(content)
+    print(o.size())
