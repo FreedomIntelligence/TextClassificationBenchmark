@@ -29,4 +29,4 @@ def parse_opt():
 #    assert args.rnn_size > 0, "rnn_size should be greater than 0"
 
 
-    return args 
+    return args
