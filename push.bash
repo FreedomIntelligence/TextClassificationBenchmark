@@ -1,4 +1,5 @@
 git add *.py
 git add models/*.py
-git commit -m "no info"
+git add *.bash
+git commit -m $1
 git push
