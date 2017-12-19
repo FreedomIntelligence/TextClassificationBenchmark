@@ -22,6 +22,8 @@ def parse_opt():
                     help='dataset')
     parser.add_argument('--keep_dropout', type=float, default=0.8,
                     help='keep_dropout')
+    parser.add_argument('--max_epoch', type=int, default=20,
+                    help='max_epoch')
 
     #kim CNN
     parser.add_argument('--kernel_sizes', type=str, default="1,2,3,5",

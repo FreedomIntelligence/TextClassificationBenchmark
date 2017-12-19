@@ -21,7 +21,7 @@ from torchtext import data
 from torchtext import datasets
 from torchtext.vocab import Vectors, GloVe, CharNGram, FastText
 from torch.nn.modules.loss import NLLLoss,MultiLabelSoftMarginLoss,MultiLabelMarginLoss,BCELoss
-import os
+import os,time
 
 
 opt = opts.parse_opt()
@@ -42,11 +42,10 @@ loss_fun = BCELoss()
 
 #batch = next(iter(train_iter))
 #print(utils.evaluation(model,test_iter))
-for i in range(10):
+for i in range(opt.max_epoch):
     for epoch,batch in enumerate(train_iter):
-    
+        start= time.time()
         predicted = model(batch.text[0])
-    
         loss= F.cross_entropy(predicted,batch.label)
 
         loss.backward()
@@ -54,9 +53,9 @@ for i in range(10):
         optimizer.step()
         if epoch% 100==0:
             if  torch.cuda.is_available():
-                print("%d ieration %d epoch with loss : %.5f" % (i,epoch,loss.cpu().data.numpy()[0]))
+                print("%d ieration %d epoch with loss : %.5f in %.4f seconds" % (i,epoch,loss.cpu().data.numpy()[0],time.time()-start))
             else:
-                print("%d ieration %d epoch with loss : %.5f" % (i,epoch,loss.data.numpy()[0]))
+                print("%d ieration %d epoch with loss : %.5f in %.4f seconds" % (i,epoch,loss.data.numpy()[0],time.time()-start))
     percision=utils.evaluation(model,test_iter)
     print("%d ieration with percision %.4f" % (i,percision))
 
