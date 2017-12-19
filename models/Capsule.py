@@ -4,7 +4,7 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 import numpy as np
-from functools import reduce
+
 BATCH_SIZE = 100
 
 NUM_EPOCHS = 500
@@ -50,11 +50,11 @@ class CapsuleLayer(nn.Module):
         
         if self.num_route_nodes != -1:
             priors =torch.matmul( x[None, :, :, None, :],self.route_weights[:, None, :, :, :])
-            total_size = reduce(lambda x,y:x*y,priors.size())
+
             if cuda:
-                logits = torch.autograd.Variable(torch.zeros(total_size)).cuda()
+                logits = torch.autograd.Variable(torch.zeros(priors.size())).cuda()
             else:
-                logits = torch.autograd.Variable(torch.zeros(total_size))
+                logits = torch.autograd.Variable(torch.zeros(priors.size()))
             for i in range(self.num_iterations):
                 probs = softmax(logits, dim=2)
                 outputs = self.squash((probs * priors).sum(dim=2, keepdim=True))
