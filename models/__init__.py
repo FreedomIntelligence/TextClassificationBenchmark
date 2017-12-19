@@ -16,6 +16,7 @@ from .CNNKim import KIMCNN1D,KIMCNN2D
 from .CNNMultiLayer import MultiLayerCNN
 from .CNNInception import InceptionCNN
 from .FastText import FastText
+from .Capsule import CapsuleNet
 def setup(opt):
     
     if opt.model == 'lstm':
@@ -33,7 +34,9 @@ def setup(opt):
     elif opt.model ==  'inception_cnn':
         model = InceptionCNN(opt) 
     elif opt.model ==  'fasttext':
-        model = FastText(opt) 
+        model = FastText(opt)
+    elif opt.model ==  'capsule':
+        model = CapsuleNet(opt)
 
     else:
         raise Exception("model not supported: {}".format(opt.model))

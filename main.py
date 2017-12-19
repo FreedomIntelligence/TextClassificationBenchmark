@@ -42,6 +42,7 @@ optimizer.zero_grad()
 loss_fun = BCELoss()
 
 #batch = next(iter(train_iter))
+#x=batch.text[0]
 #print(utils.evaluation(model,test_iter))
 for i in range(opt.max_epoch):
     for epoch,batch in enumerate(train_iter):
