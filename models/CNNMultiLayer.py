@@ -12,7 +12,7 @@ class MultiLayerCNN(nn.Module):
         self.embed = nn.Embedding(opt.vocab_size + 1, opt.embedding_dim)
 
         self.conv1 = nn.Sequential(
-            nn.Conv1d(opt.l0, 256, kernel_size=7, stride=1),
+            nn.Conv1d(opt.max_seq_len, 256, kernel_size=7, stride=1),
             nn.ReLU(),
             nn.MaxPool1d(kernel_size=3, stride=3)
         )
@@ -44,11 +44,11 @@ class MultiLayerCNN(nn.Module):
             nn.MaxPool1d(kernel_size=3, stride=3)
         )
 
-        self.fc = nn.Linear(256, opt.label_size)
+        self.fc = nn.Linear(256*7, opt.label_size)
 
-    def forward(self, x_input):
+    def forward(self, x):
         # Embedding
-        x = self.embed(x_input)  # dim: (batch_size, max_seq_len, embedding_size)
+        x = self.embed(x)  # dim: (batch_size, max_seq_len, embedding_size)
         x = self.conv1(x)
         x = self.conv2(x)
         x = self.conv3(x)
