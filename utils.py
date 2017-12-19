@@ -19,9 +19,15 @@ def loadData(opt):
 
     TEXT = data.Field(lower=True, include_lengths=True, batch_first=True,fix_length=opt.max_seq_len)
     LABEL = data.Field(sequential=False)
-
-    train, test = datasets.IMDB.splits(TEXT, LABEL)
-
+    if opt.dataset=="imdb":
+        train, test = datasets.IMDB.splits(TEXT, LABEL)
+    elif opt.dataset=="sst":
+        train, val, test = datasets.SST.splits( TEXT, LABEL, fine_grained=True, train_subtrees=True,
+                                               filter_pred=lambda ex: ex.label != 'neutral')
+    elif opt.dataset=="trec":
+        train, test = datasets.TREC.splits(TEXT, LABEL, fine_grained=True)
+    else:
+        print("does not support this datset")
     TEXT.build_vocab(train, vectors=GloVe(name='6B', dim=300))
     LABEL.build_vocab(train)    
     # print vocab information
