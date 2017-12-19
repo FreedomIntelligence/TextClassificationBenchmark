@@ -60,7 +60,7 @@ class CapsuleLayer(nn.Module):
                 outputs = self.squash((probs * priors).sum(dim=2, keepdim=True))
 
                 if i != self.num_iterations - 1:
-                    delta_logits = (priors * outputs).sum(dim=-1, keepdim=True)
+                    delta_logits = (torch.mul(priors , outputs)).sum(dim=-1, keepdim=True)
                     logits = logits + delta_logits
         else:
             outputs = [capsule(x).view(x.size(0), -1, 1) for capsule in self.capsules]
