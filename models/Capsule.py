@@ -10,7 +10,7 @@ BATCH_SIZE = 100
 NUM_EPOCHS = 500
 NUM_ROUTING_ITERATIONS = 3
 
-cuda = False
+cuda = torch.cuda.is_available()
 
 def softmax(input, dim=1):
     transposed_input = input.transpose(dim, len(input.size()) - 1)
@@ -51,7 +51,7 @@ class CapsuleLayer(nn.Module):
         if self.num_route_nodes != -1:
             priors =torch.matmul( x[None, :, :, None, :],self.route_weights[:, None, :, :, :])
 
-            if cuda:
+            if torch.cuda.is_available():
                 logits = torch.autograd.Variable(torch.zeros(priors.size())).cuda()
             else:
                 logits = torch.autograd.Variable(torch.zeros(priors.size()))
@@ -115,13 +115,13 @@ class CapsuleNet(nn.Module):
         x = self.digit_capsules(x).squeeze().transpose(0, 1)
 
         classes = (x ** 2).sum(dim=-1) ** 0.5
-        classes = F.softmax(classes,dim=1)
+        classes = F.softmax(classes)
         if not reconstruct:
             return classes
         if y is None:
             # In all batches, get the most active capsule.
             _, max_length_indices = classes.max(dim=1)
-            if cuda:
+            if torch.cuda.is_available():
                 y = Variable(torch.sparse.torch.eye(self.label_size)).cuda().index_select(dim=0, index=max_length_indices.data)
             else:
                 y = Variable(torch.sparse.torch.eye(self.label_size)).index_select(dim=0, index=max_length_indices.data)
