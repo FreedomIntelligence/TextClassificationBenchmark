@@ -11,7 +11,7 @@ class Inception(nn.Module):
     def __init__(self,cin,co,relu=True,norm=True):
         super(Inception, self).__init__()
         assert(co%4==0)
-        cos=[co/4]*4
+        cos=[int(co/4)]*4
         self.activa=nn.Sequential()
         if norm:self.activa.add_module('norm',nn.BatchNorm1d(co))
         if relu:self.activa.add_module('relu',nn.ReLU(True))
@@ -62,8 +62,7 @@ class InceptionCNN(nn.Module):
             nn.Linear(getattr(opt,"linear_hidden_size",2000) ,opt.label_size)
         )
         if opt.__dict__.get("embeddings",None) is not None:
-            print('load embedding')
-            self.encoder.weight.data.copy_(t.from_numpy(opt.embeddings))
+            self.encoder.weight=nn.Parameter(opt.embeddings)
  
     def forward(self,content):
      

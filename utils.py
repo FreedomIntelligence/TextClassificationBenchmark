@@ -45,6 +45,7 @@ def loadData(opt):
     return train_iter, test_iter
 
 def evaluation(model,test_iter):
+    model.eval()
     accuracy=[]
     batch= next(iter(test_iter))
     for index,batch in enumerate( test_iter):
@@ -56,5 +57,6 @@ def evaluation(model,test_iter):
             accuracy.append(percision.data.cpu().numpy()[0] )
         else:
             accuracy.append(percision.data.numpy()[0] )
+    model.train()
     return np.mean(accuracy)
     
