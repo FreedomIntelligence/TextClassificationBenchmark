@@ -1,29 +1,52 @@
-# TextClassificationBenchmark
+# Text Classification Benchmark
 A Benchmark of Text Classification in PyTorch
 
-我们这个项目的主要目标是实现一些文本的baseline，主要从两个方面来做
 
->1.收集一些主要的文本分类的数据集，中文和英文，最好还能够提供一个基础的embedding向量
+## Motivation
 
->2.实现一些state-of-art的文本分类模型，包括基础的机器学习方法，朴素贝叶斯+TFIDF和一些基于CNN/RNN的文本分类方法
+We are trying to build a Benchmark for Text Classification including
 
 
-在这样一个benchmark上做一些基础方法的比较
+>Many Text Classification  **DataSet**, including Sentiment/Topic Classfication, popular language(e.g. English and Chinese). Meanwhile, a basic word embedding is provided.
 
-首先你可能需要安装一些基础的库 [安装库](docs/windows_torch.md)
+>Implment many popular and state-of-art **Models**, especially in deep neural network.
+
+## Have done
+We have done some dataset and models
+### Dataset done
+- IMDB
+- SST 
+- Trec
+
+### Models done
+- BasicCNN
+- KimCNN
+- MultiLayerCNN
+- InceptionCNN
+- LSTM
+- FastText
+
+
+## Libary
+
+You should have install [these librarys](docs/windows_torch.md)
 <pre>
 python3
 torch
 torchtext
 </pre>
 
-第二你可能需要把数据配置好，[数据配置](docs/data_config.md)
-包括
+## Dataset 
+Dataset will be automatically configured in current path, or download manually your data in [Dataset](docs/data_config.md),  step-by step.
+
+including
 <pre>
-Glove词向量
-情感文本分类数据集IMDB
+Glove embeding
+Sentiment classfication dataset IMDB
 </pre>
-跑默认配置
+## How to run
+
+Run in default  setting
 <pre><code>python main.py</code></pre>
 
 CNN 
@@ -32,7 +55,7 @@ CNN
 LSTM
 <pre><code>python main.py -model lstm</code></pre>
 
-### Contributor
+## Contributor
 -	[@Allenzhai](https://github.com/zhaizheng)
 -	[@JareWei](https://github.com/jacobwei)
 -	[@AlexMeng](https://github.com/EdwardLorenz)
