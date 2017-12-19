@@ -16,7 +16,7 @@ def parse_opt():
                     help='learning_rate')
     parser.add_argument('--grad_clip', type=float, default=1e-1,
                     help='grad_clip')
-    parser.add_argument('--model', type=str, default="cnn",
+    parser.add_argument('--model', type=str, default="kim_cnn",
                     help='model name')
     parser.add_argument('--dataset', type=str, default="imdb",
                     help='dataset')
@@ -28,6 +28,8 @@ def parse_opt():
                     help='kernel_sizes')
     parser.add_argument('--kernel_nums', type=str, default="256,256,256,256",
                     help='kernel_nums')
+    parser.add_argument('--embedding_type', type=str, default="non-static",
+                    help='embedding_type')
     
 #
     args = parser.parse_args()

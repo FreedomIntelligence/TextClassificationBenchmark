@@ -9,10 +9,10 @@ class KIMCNN1D(nn.Module):
 
         self.embedding_type = opt.embedding_type
         self.batch_size = opt.batch_size
-        self.max_sent_len = opt.max_sent_len
+        self.max_seq_len = opt.max_seq_len
         self.embedding_dim = opt.embedding_dim
         self.vocab_size = opt.vocab_size
-        self.CLASS_SIZE = opt.label_size
+        self.label_size = opt.label_size
         self.kernel_sizes = opt.kernel_sizes
         self.kernel_nums = opt.kernel_nums
         
@@ -28,7 +28,7 @@ class KIMCNN1D(nn.Module):
             if self.embedding_type == "static":
                 self.embedding.weight.requires_grad = False
             elif self.embedding_type == "multichannel":
-                self.embedding2 = nn.Embedding(self.vocab_size + 2, self.embedding_dim, padding_idx=self.VOCAB_SIZE + 1)
+                self.embedding2 = nn.Embedding(self.vocab_size + 2, self.embedding_dim, padding_idx=self.vocab_size + 1)
                 self.embedding2.weight=nn.Parameter(opt.embeddings) 
                 self.embedding2.weight.requires_grad = False
                 self.in_channel = 2
@@ -36,7 +36,7 @@ class KIMCNN1D(nn.Module):
                 pass
 
         for i in range(len(self.kernel_sizes)):
-            conv = nn.Conv1d(self.in_channel, self.kernel_nums[i], self.embedding_dim * self.filters[i], stride=self.WORD_DIM)
+            conv = nn.Conv1d(self.in_channel, self.kernel_nums[i], self.embedding_dim * self.kernel_sizes[i], stride=self.embedding_dim)
             setattr(self, 'conv_%d'%i, conv)
 
         self.fc = nn.Linear(sum(self.kernel_nums), self.label_size)
@@ -45,13 +45,13 @@ class KIMCNN1D(nn.Module):
         return getattr(self, 'conv_%d'%i)
 
     def forward(self, inp):
-        x = self.embedding(inp).view(-1, 1, self.embedding_dim * self.max_sent_len)
+        x = self.embedding(inp).view(-1, 1, self.embedding_dim * self.max_seq_len)
         if self.embedding_type == "multichannel":
-            x2 = self.embedding2(inp).view(-1, 1, self.embedding_dim * self.max_sent_len)
+            x2 = self.embedding2(inp).view(-1, 1, self.embedding_dim * self.max_seq_len)
             x = torch.cat((x, x2), 1)
 
         conv_results = [
-            F.max_pool1d(F.relu(self.get_conv(i)(x)), self.max_sent_len - self.kernel_sizes[i] + 1)
+            F.max_pool1d(F.relu(self.get_conv(i)(x)), self.max_seq_len - self.kernel_sizes[i] + 1)
                 .view(-1, self.kernel_nums[i])
             for i in range(len(self.kernel_sizes))]
 
