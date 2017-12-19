@@ -57,7 +57,7 @@ class CapsuleLayer(nn.Module):
                 logits = torch.autograd.Variable(torch.zeros(priors.size()))
             for i in range(self.num_iterations):
                 probs = softmax(logits, dim=2)
-                outputs = self.squash((probs * priors).sum(dim=2, keepdim=True))
+                outputs = self.squash((torch.mul(probs , priors)).sum(dim=2, keepdim=True))
 
                 if i != self.num_iterations - 1:
                     delta_logits = (torch.mul(priors , outputs)).sum(dim=-1, keepdim=True)
