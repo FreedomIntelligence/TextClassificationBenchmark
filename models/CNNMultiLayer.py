@@ -10,8 +10,10 @@ class MultiLayerCNN(nn.Module):
     def __init__(self, opt):
         super(MultiLayerCNN, self).__init__()
         self.embed = nn.Embedding(opt.vocab_size + 1, opt.embedding_dim)
+        
         if opt.__dict__.get("embeddings",None) is not None:
             self.embed.weight=nn.Parameter(opt.embeddings)
+            
         self.conv1 = nn.Sequential(
             nn.Conv1d(opt.max_seq_len, 256, kernel_size=7, stride=1),
             nn.ReLU(),

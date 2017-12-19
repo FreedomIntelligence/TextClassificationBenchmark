@@ -51,6 +51,10 @@ class BasicCNN2D(nn.Module):
         self.kernel_sizes = opt.kernel_sizes
 
         self.embed = nn.Embedding(self.vocab_size+1, self.embedding_dim)
+        
+        if opt.__dict__.get("embeddings",None) is not None:
+            self.embed.weight=nn.Parameter(opt.embeddings)
+            
         self.conv = nn.ModuleList([nn.Conv2d(in_channel, out_channel, (K, self.embedding_dim)) for K,out_channel in zip(self.kernel_sizes,self.kernel_nums)])
 
         self.dropout = nn.Dropout(self.keep_dropout)

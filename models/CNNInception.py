@@ -67,7 +67,7 @@ class InceptionCNN(nn.Module):
     def forward(self,content):
      
         content=self.encoder(content)
-        if self.opt.static:
+        if self.opt.embedding_type=="static":
             content=content.detach(0)
 
         content_out=self.content_conv(content.permute(0,2,1))
