@@ -23,9 +23,10 @@ from torchtext.vocab import Vectors, GloVe, CharNGram, FastText
 from torch.nn.modules.loss import NLLLoss,MultiLabelSoftMarginLoss,MultiLabelMarginLoss,BCELoss
 import os
 
-if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
 opt = opts.parse_opt()
+if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
+    os.environ["CUDA_VISIBLE_DEVICES"] =opt.gpu
 #opt.model ='lstm'
 #opt.model ='fasttext'
 

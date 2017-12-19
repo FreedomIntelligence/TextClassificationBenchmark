@@ -15,7 +15,7 @@ def clip_gradient(optimizer, grad_clip):
 
 def loadData(opt):
 
-    device = opt.gpu if  torch.cuda.is_available()  else -1
+    device = 0 if  torch.cuda.is_available()  else -1
 
     TEXT = data.Field(lower=True, include_lengths=True, batch_first=True,fix_length=opt.max_seq_len)
     LABEL = data.Field(sequential=False)
