@@ -16,7 +16,7 @@ def parse_opt():
                     help='learning_rate')
     parser.add_argument('--grad_clip', type=float, default=1e-1,
                     help='grad_clip')
-    parser.add_argument('--model', type=str, default="lstm",
+    parser.add_argument('--model', type=str, default="cnn",
                     help='model name')
 
 

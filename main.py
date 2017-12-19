@@ -26,8 +26,8 @@ import os
 if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 opt = opts.parse_opt()
-opt.model ='lstm'
-opt.model ='fasttext'
+#opt.model ='lstm'
+#opt.model ='fasttext'
 
 train_iter, test_iter = utils.loadData(opt)
 
