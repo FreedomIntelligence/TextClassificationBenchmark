@@ -20,7 +20,7 @@ def parse_opt():
                     help='model name')
     parser.add_argument('--dataset', type=str, default="imdb",
                     help='dataset')
-    parser.add_argument('--keep_dropout', type=str, default=0.8,
+    parser.add_argument('--keep_dropout', type=float, default=0.8,
                     help='keep_dropout')
 
     #kim CNN
@@ -30,6 +30,8 @@ def parse_opt():
                     help='kernel_nums')
     parser.add_argument('--embedding_type', type=str, default="non-static",
                     help='embedding_type')
+    parser.add_argument('--gpu', type=str, default="0",
+                    help='gpu number')
     
 #
     args = parser.parse_args()

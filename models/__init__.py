@@ -22,8 +22,12 @@ def setup(opt):
         model = LSTMClassifier(opt)
     elif opt.model == 'baisc_cnn' or opt.model == "cnn":
         model = BasicCNN1D(opt)
-    elif opt.model ==  'kim_cnn':
+    elif opt.model == 'baisc_cnn_2d' :
+        model = BasicCNN2D(opt)
+    elif opt.model == 'kim_cnn' :
         model = KIMCNN1D(opt)
+    elif opt.model ==  'kim_cnn_2d':
+        model = KIMCNN2D(opt)
     elif opt.model ==  'multi_cnn':
         model = MultiLayerCNN(opt)
     elif opt.model ==  'inception_cnn':

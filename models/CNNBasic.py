@@ -40,20 +40,21 @@ class BasicCNN2D(nn.Module):
     """
     def __init__(self, args):
         super(BasicCNN2D, self).__init__()
-        self.args = args
+        self.opt = opt
 
-        embedding_dim = args.embed_dim
-        embedding_num = args.num_features
-        class_number = args.class_num
+        self.embedding_dim = opt.embedding_dim
+        self.vocab_size = opt.vocab_size
+        self.label_size = opt.label_size
+        self.keep_dropout = opt.keep_dropout
         in_channel = 1
-        out_channel = args.kernel_num
-        kernel_sizes = args.kernel_sizes
+        self.kernel_nums = opt.kernel_nums
+        self.kernel_sizes = opt.kernel_sizes
 
-        self.embed = nn.Embedding(embedding_num+1, embedding_dim)
-        self.conv = nn.ModuleList([nn.Conv2d(in_channel, out_channel, (K, embedding_dim)) for K in kernel_sizes])
+        self.embed = nn.Embedding(self.vocab_size+1, self.embedding_dim)
+        self.conv = nn.ModuleList([nn.Conv2d(in_channel, out_channel, (K, self.embedding_dim)) for K,out_channel in zip(self.kernel_sizes,self.kernel_nums)])
 
-        self.dropout = nn.Dropout(args.dropout)
-        self.fc = nn.Linear(len(kernel_sizes) * out_channel, class_number)
+        self.dropout = nn.Dropout(self.keep_dropout)
+        self.fc = nn.Linear(len(self.kernel_sizes) * self.out_channel, self.label_size)
 
 
     def forward(self, input_x):
@@ -64,7 +65,7 @@ class BasicCNN2D(nn.Module):
         # Embedding
         x = self.embed(input_x)  # dim: (batch_size, max_seq_len, embedding_size)
 
-        if self.args.static:
+        if self.opt.static:
             x = F.Variable(input_x)
 
         # Conv & max pool
