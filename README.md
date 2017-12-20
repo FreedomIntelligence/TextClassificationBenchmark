@@ -57,7 +57,7 @@ LSTM
 
 ## Contributor
 -	[@Allenzhai](https://github.com/zhaizheng)
--	[@JareWei](https://github.com/jacobwei)
+-	[@JaredWei](https://github.com/jacobwei)
 -	[@AlexMeng](https://github.com/EdwardLorenz)
 -	[@Lilianwang](https://github.com/WangLilian)
 -	[@ZhanSu](https://github.com/shuishen112)
