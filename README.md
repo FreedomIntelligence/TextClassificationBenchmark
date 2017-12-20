@@ -50,10 +50,10 @@ Run in default  setting
 <pre><code>python main.py</code></pre>
 
 CNN 
-<pre><code>python main.py -model cnn</code></pre>
+<pre><code>python main.py --model cnn</code></pre>
 
 LSTM
-<pre><code>python main.py -model lstm</code></pre>
+<pre><code>python main.py --model lstm</code></pre>
 
 ## Contributor
 -	[@Allenzhai](https://github.com/zhaizheng)
