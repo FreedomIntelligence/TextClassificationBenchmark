@@ -43,29 +43,29 @@ class LSTMClassifier(nn.Module):
         lstm_out, self.hidden = self.lstm(x, self.hidden)
         y  = self.hidden2label(lstm_out[-1])
         return y
-    def forward1(self, sentence):
-       
-        return torch.zeros(sentence.size()[0], self.opt.label_size)
-#    def __call__(self, **args):
-#        self.forward(args)
-    def test():
-        
-        import numpy as np
-        
-        word_embeddings = nn.Embedding(10000, 300)
-        lstm = nn.LSTM(300, 100)
-        h0 = Variable(torch.zeros(1, 128, 100))
-        c0 = Variable(torch.zeros(1, 128, 100))
-        hidden=(h0, c0)
-        sentence = Variable(torch.LongTensor(np.zeros((128,30),dtype=np.int64)))
-        embeds = word_embeddings(sentence)
-        torch.tile(sentence)
-        sentence.size()[0]
-       
-        
-        
-#        x= Variable(torch.zeros(30, 128, 300))
-        x = embeds.view(sentence.size()[1], self.batch_size, -1)
-        embeds=embeds.permute(1,0,2)
-        lstm_out, hidden = lstm(embeds, hidden)
-#                  
+#    def forward1(self, sentence):
+#       
+#        return torch.zeros(sentence.size()[0], self.opt.label_size)
+##    def __call__(self, **args):
+##        self.forward(args)
+#    def test():
+#        
+#        import numpy as np
+#        
+#        word_embeddings = nn.Embedding(10000, 300)
+#        lstm = nn.LSTM(300, 100)
+#        h0 = Variable(torch.zeros(1, 128, 100))
+#        c0 = Variable(torch.zeros(1, 128, 100))
+#        hidden=(h0, c0)
+#        sentence = Variable(torch.LongTensor(np.zeros((128,30),dtype=np.int64)))
+#        embeds = word_embeddings(sentence)
+#        torch.tile(sentence)
+#        sentence.size()[0]
+#       
+#        
+#        
+##        x= Variable(torch.zeros(30, 128, 300))
+#        x = embeds.view(sentence.size()[1], self.batch_size, -1)
+#        embeds=embeds.permute(1,0,2)
+#        lstm_out, hidden = lstm(embeds, hidden)
+##                  
