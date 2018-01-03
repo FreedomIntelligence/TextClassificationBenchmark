@@ -21,7 +21,7 @@ class RNN_CNN(nn.Module):
         self.hidden = self.init_hidden()
         
         self.content_dim = 256
-        self.conv =  nn.Conv1d(opt.hidden_dim, self.content_dim, opt.hidden_dim * 2, stride=opt.embedding_dim)
+        self.conv =  nn.Conv1d(in_channels=opt.hidden_dim, out_channels=self.content_dim, kernel_size=opt.hidden_dim * 2, stride=opt.embedding_dim)
         self.hidden2label = nn.Linear(self.content_dim, opt.label_size)
 
     def init_hidden(self,batch_size=None):

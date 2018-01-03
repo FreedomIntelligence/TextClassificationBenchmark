@@ -43,8 +43,8 @@ class LSTMBI(nn.Module):
 
 #        x = embeds.view(sentence.size()[1], self.batch_size, -1)
         x=embeds.permute(1,0,2)
-        self.hidden= self.init_hidden(sentence.size()[0])
-        lstm_out, self.hidden = self.bilstm(x, self.hidden) 
-        y  = self.hidden2label(lstm_out[-1])
+        self.hidden= self.init_hidden(sentence.size()[0]) #2x64x64
+        lstm_out, self.hidden = self.bilstm(x, self.hidden)  #lstm_out:200x64x128
+        y  = self.hidden2label(lstm_out[-1]) #64x3
         return y
 
