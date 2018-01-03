@@ -3,25 +3,47 @@ import os,urllib
 class Dataset(object):
     def __init__(self,opt=None):
         if opt is not None:
-            self.setup(opt) 
-        self.root=".data_waby"
+            self.setup(opt)
+        else:
+            self.name="demo"
+            self.dirname="demo"         
+               
         self.urls=[]
+        self.root=".data_demo"
+        self.saved_path= os.path.join(os.path.join(self.root,"clean"),self.name)
+        self.formated_files=None
+
+        self.http_proxy= opt.__dict__.get("proxy","null")
+        
     def setup(self,opt):
-#        self.http_proxy='http://dev-proxy.oa.com:8080'
+
         self.name=opt.dataset
         self.dirname=opt.dataset
+        self.http_proxy= opt.__dict__.get("proxy","null")
         
         
     def process(self):
         dirname=self.download()
         print("processing dirname: "+ dirname)
-        
+        raise Exception("method in father class have been called in processing: {} dataset".format(opt.dataset))
         return dirname
-    def download_from_url(self,url, path, schedule=None,http_proxy= "http://dev-proxy.oa.com:8080"):
+    
+    
+    def getFormatedData(self):
+        
+        if self.formated_files is not None:
+            return self.formated_files
+        
+        if os.path.exists(self.saved_path):
+            return [os.path.join(self.saved_path,filename) for filename in os.listdir(self.saved_path)]
+        self.formated_files = self.process()
+        return self.formated_files
+    
+    def download_from_url(self,url, path, schedule=None):
         if schedule is None:
             schedule=lambda a,b,c : print("%.1f"%(100.0 * a * b / c), end='\r',flush=True) if (int(a * b / c)*100)%10==0 else None
-        if http_proxy is not None:
-            proxy = urllib.request.ProxyHandler({'http': http_proxy})
+        if self.http_proxy != "null":
+            proxy = urllib.request.ProxyHandler({'http': self.http_proxy})
     # construct a new opener using your proxy settings
             opener = urllib.request.build_opener(proxy)
     # install the openen on the module-level
@@ -29,11 +51,10 @@ class Dataset(object):
         urllib.request.urlretrieve(url,path,lambda a,b,c : print("%.1f"%(100.0 * a * b / c), end='\r',flush=True) if (int(a * b / c)*100)%10==0 else None )
         return path
     
-    def download(self,  check=None):
+    def download(self,check=None):
         """Download and unzip an online archive (.zip, .gz, or .tgz).
     
         Arguments:
-            root (str): Folder to download data to.
             check (str or None): Folder whose existence indicates
                 that the dataset has already been downloaded, or
                 None to check the existence of root/{cls.name}.
@@ -67,18 +88,8 @@ class Dataset(object):
                     with tarfile.open(zpath, 'r:gz') as tar:
                         dirs = [member for member in tar.getmembers()]
                         tar.extractall(path=path, members=dirs)
-        return os.path.join(path, os.path.splitext(filename)[-2])
+        return path
     
 
-
-if __name__ =="__main__":
-    import opts
-    opt = opts.parse_opt()
-    opt.max_seq_len=-1
-    from dataloader import Dataset
-    x=Dataset(opt)
-     
-    x.process()
-#    datas=loadData(opt)
 
 

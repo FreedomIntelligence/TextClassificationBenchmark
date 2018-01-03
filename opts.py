@@ -16,7 +16,7 @@ def parse_opt():
                     help='learning_rate')
     parser.add_argument('--grad_clip', type=float, default=1e-1,
                     help='grad_clip')
-    parser.add_argument('--model', type=str, default="capsule",
+    parser.add_argument('--model', type=str, default="cnn",
                     help='model name')
     parser.add_argument('--dataset', type=str, default="imdb",
                     help='dataset')
@@ -34,6 +34,8 @@ def parse_opt():
                     help='embedding_type')
     parser.add_argument('--gpu', type=str, default="0",
                     help='gpu number')
+    parser.add_argument('--proxy', type=str, default="null",
+                    help='http://proxy.xx.com:8080')
     
 #
     args = parser.parse_args()

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from .IMDB import IMDBDataset
+from .imdb import IMDBDataset
 
 
 def getDataset(opt):
