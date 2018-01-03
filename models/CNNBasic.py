@@ -18,8 +18,8 @@ class BasicCNN1D(nn.Module):
 
         self.content_conv = nn.Sequential(
             nn.Conv1d(in_channels = opt.embedding_dim,
-                      out_channels = self.content_dim,
-                      kernel_size = self.kernel_size),
+                      out_channels = self.content_dim, #256
+                      kernel_size = self.kernel_size), #3
             nn.ReLU(),
             nn.MaxPool1d(kernel_size = (opt.max_seq_len - self.kernel_size + 1))
 #            nn.AdaptiveMaxPool1d()
@@ -28,10 +28,10 @@ class BasicCNN1D(nn.Module):
 
     def forward(self,  content):
 
-        content = self.encoder(content)
-        content_out = self.content_conv(content.permute(0,2,1))
-        reshaped = content_out.view(content_out.size(0), -1)
-        logits = self.fc(reshaped)
+        content = self.encoder(content) #64x200x300
+        content_out = self.content_conv(content.permute(0,2,1)) #64x256x1
+        reshaped = content_out.view(content_out.size(0), -1) #64x256
+        logits = self.fc(reshaped) #64x3
         return logits
 class BasicCNN2D(nn.Module):
     """
