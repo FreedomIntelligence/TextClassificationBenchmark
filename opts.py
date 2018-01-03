@@ -16,11 +16,8 @@ def parse_opt():
                     help='learning_rate')
     parser.add_argument('--grad_clip', type=float, default=1e-1,
                     help='grad_clip')
-<<<<<<< HEAD
+
     parser.add_argument('--model', type=str, default="cnn",
-=======
-    parser.add_argument('--model', type=str, default="rcnn",
->>>>>>> aa460ab627bf12be858d67503455ca4979e682d1
                     help='model name')
     parser.add_argument('--dataset', type=str, default="imdb",
                     help='dataset')

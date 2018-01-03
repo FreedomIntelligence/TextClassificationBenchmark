@@ -17,6 +17,10 @@ from .CNNMultiLayer import MultiLayerCNN
 from .CNNInception import InceptionCNN
 from .FastText import FastText
 from .Capsule import CapsuleNet
+from .RCNN import RCNN
+from .RNN_CNN import RNN_CNN
+from .LSTMBI import LSTMBI
+
 def setup(opt):
     
     if opt.model == 'lstm':
@@ -37,6 +41,12 @@ def setup(opt):
         model = FastText(opt)
     elif opt.model ==  'capsule':
         model = CapsuleNet(opt)
+    elif opt.model ==  'rnn_cnn':
+        model = RNN_CNN(opt)
+    elif opt.model ==  'rcnn':
+        model = RCNN(opt)
+    elif opt.model ==  'bilstm':
+        model = LSTMBI(opt)
 
     else:
         raise Exception("model not supported: {}".format(opt.model))
