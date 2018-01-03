@@ -35,13 +35,13 @@ class LSTMClassifier(nn.Module):
         return (h0, c0)
 #    @profile
     def forward(self, sentence):
-        embeds = self.word_embeddings(sentence)
+        embeds = self.word_embeddings(sentence) #64x200x300
 
 #        x = embeds.view(sentence.size()[1], self.batch_size, -1)
-        x=embeds.permute(1,0,2)
-        self.hidden= self.init_hidden(sentence.size()[0])
-        lstm_out, self.hidden = self.lstm(x, self.hidden)
-        y  = self.hidden2label(lstm_out[-1])
+        x=embeds.permute(1,0,2) #200x64x300
+        self.hidden= self.init_hidden(sentence.size()[0]) #1x64x128
+        lstm_out, self.hidden = self.lstm(x, self.hidden) #200x64x128
+        y  = self.hidden2label(lstm_out[-1])  #64x3
         return y
 #    def forward1(self, sentence):
 #       

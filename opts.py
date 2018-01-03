@@ -6,17 +6,21 @@ def parse_opt():
                     help='hidden_dim')   
     
 
-    parser.add_argument('--max_seq_len', type=int, default=300,
+    parser.add_argument('--max_seq_len', type=int, default=200,
                     help='max_seq_len')
     parser.add_argument('--batch_size', type=int, default=64,
                     help='batch_size')
-    parser.add_argument('--embedding_dim', type=int, default=300,
+    parser.add_argument('--embedding_dim', type=int, default=100,
                     help='embedding_dim')
     parser.add_argument('--learning_rate', type=float, default=2e-5,
                     help='learning_rate')
     parser.add_argument('--grad_clip', type=float, default=1e-1,
                     help='grad_clip')
+<<<<<<< HEAD
     parser.add_argument('--model', type=str, default="cnn",
+=======
+    parser.add_argument('--model', type=str, default="rcnn",
+>>>>>>> aa460ab627bf12be858d67503455ca4979e682d1
                     help='model name')
     parser.add_argument('--dataset', type=str, default="imdb",
                     help='dataset')
