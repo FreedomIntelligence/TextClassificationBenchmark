@@ -9,7 +9,6 @@ from torch.autograd import Variable
 import torch.optim as optim
 import numpy as np
 
-
 from six.moves import cPickle
 
 import opts
@@ -22,7 +21,6 @@ from torchtext import datasets
 from torchtext.vocab import Vectors, GloVe, CharNGram, FastText
 from torch.nn.modules.loss import NLLLoss,MultiLabelSoftMarginLoss,MultiLabelMarginLoss,BCELoss
 import os,time
-
 
 opt = opts.parse_opt()
 if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
@@ -42,7 +40,7 @@ optimizer.zero_grad()
 loss_fun = BCELoss()
 
 #batch = next(iter(train_iter))
-#x=batch.text[0]
+#x=batch.text[0] #64x200
 #print(utils.evaluation(model,test_iter))
 for i in range(opt.max_epoch):
     for epoch,batch in enumerate(train_iter):
