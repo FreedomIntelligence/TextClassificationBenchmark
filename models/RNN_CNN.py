@@ -21,7 +21,8 @@ class RNN_CNN(nn.Module):
         self.hidden = self.init_hidden()
         
         self.content_dim = 256
-        self.conv =  nn.Conv1d(in_channels=opt.hidden_dim, out_channels=self.content_dim, kernel_size=opt.hidden_dim * 2, stride=opt.embedding_dim)
+        ###self.conv =  nn.Conv1d(in_channels=opt.hidden_dim, out_channels=self.content_dim, kernel_size=opt.hidden_dim * 2, stride=opt.embedding_dim)
+        self.conv =  nn.Conv1d(in_channels=1, out_channels=self.content_dim, kernel_size=opt.hidden_dim * 2, stride=opt.hidden_dim)
         self.hidden2label = nn.Linear(self.content_dim, opt.label_size)
 
     def init_hidden(self,batch_size=None):
@@ -44,8 +45,8 @@ class RNN_CNN(nn.Module):
         self.hidden= self.init_hidden(sentence.size()[0]) #1x64x128
         lstm_out, self.hidden = self.lstm(x, self.hidden) ###input (seq_len, batch, input_size) #Outupts:output, (h_n, c_n) output:(seq_len, batch, hidden_size * num_directions)
         #lstm_out 200x64x128  lstm_out.permute(1,2,0):64x128x200
-        y = self.conv(lstm_out.permute(1,2,0)) ###64x256x1
+        y = self.conv(lstm_out.permute(1,2,0).contiguous().view(self.batch_size,1,-1)) #64x256x199
         ###y = self.conv(lstm_out.permute(1,2,0).contiguous().view(self.batch_size,128,-1))
         #y  = self.hidden2label(y.view(sentence.size()[0],-1))
-        y  = self.hidden2label(y.view(y.size()[0],-1)) #64x3
+        y  = self.hidden2label(y.permute(2,0,1)[-1]) #64x3
         return y
