@@ -72,8 +72,8 @@ class BucketIterator(object):
     def transform(self,data):
         if torch.cuda.is_available():
             data=data.reset_index()
-            text= Variable(torch.longTensor(data.text).cuda())
-            label= Variable(torch.LongTensor(data.label.tolist()).cuda())
+            text= Variable(torch.LongTensor(data.text).cuda())
+            label= Variable(torch.LongTensor([int(i) for i in data.label.tolist()]).cuda())
         else:
             data=data.reset_index()
             text= Variable(torch.LongTensor(data.text))
@@ -130,11 +130,9 @@ def getEmbeddingFile(name):
     return ".vector_cache\glove.6B.300d.txt"
 
 def getDataSet(opt):
-    
-    data_dir = os.path.join(".data/clean",opt.dataset)
-    if not os.path.exists(data_dir):
-         import dataloader
-         dataset= dataloader.getDataset(opt)
+
+    import dataloader
+    dataset= dataloader.getDataset(opt)
 
 #    files=[os.path.join(data_dir,data_name)   for data_name in ['train.txt','test.txt','dev.txt']]
     
