@@ -71,6 +71,7 @@ class BucketIterator(object):
     
     def transform(self,data):
         if torch.cuda.is_available():
+            data=data.reset_index()
             text= Variable(torch.longTensor(data.text).cuda())
             label= Variable(torch.LongTensor(data.label.tolist()).cuda())
         else:
