@@ -12,6 +12,8 @@ import pickle
 from utils import log_time_delta
 from tqdm import tqdm
 from dataloader import Dataset
+import torch
+from torch.autograd import Variable
 
 class Alphabet(dict):
     def __init__(self, start_feature_id = 1, alphabet_type="text"):
@@ -40,10 +42,21 @@ class Alphabet(dict):
     def dump(self, fname,path="temp"):
         if not os.path.exists(path):
             os.mkdir(path)
-        with open(os.path.join(path,fname), "w") as out:
+        with open(os.path.join(path,fname), "w",encoding="utf-8") as out:
             for k in sorted(self.keys()):
                 out.write("{}\t{}\n".format(k, self[k]))
 
+class DottableDict(dict):
+    def __init__(self, *args, **kwargs):
+        dict.__init__(self, *args, **kwargs)
+        self.__dict__ = self
+        self.allowDotting()
+    def allowDotting(self, state=True):
+        if state:
+            self.__dict__ = self
+        else:
+            self.__dict__ = dict()
+            
 class BucketIterator(object):
     def __init__(self,data,opt=None,batch_size=2,shuffle=True):
         self.shuffle=shuffle
@@ -52,16 +65,28 @@ class BucketIterator(object):
         if opt is not None:
             self.setup(opt)
     def setup(self,opt):
-        self.data=opt.data
+        
         self.batch_size=opt.batch_size
         self.shuffle=opt.__dict__.get("shuffle",self.shuffle)
+    
+    def transform(self,data):
+        if torch.cuda.is_available():
+            text= Variable(torch.longTensor(data.text).cuda())
+            label= Variable(torch.LongTensor(data.label.tolist()).cuda())
+        else:
+            data=data.reset_index()
+            text= Variable(torch.LongTensor(data.text))
+            label= Variable(torch.LongTensor(data.label.tolist()))
+        return DottableDict({"text":text,"label":label})
+    
     def __iter__(self):
         if self.shuffle:
             self.data = self.data.sample(frac=1).reset_index(drop=True)
         batch_nums = int(len(self.data)/self.batch_size)
         for  i in range(batch_nums):
-            yield self.data[i*self.batch_size:(i+1)*self.batch_size]
-        yield self.data[-1*self.batch_size:]
+            yield self.transform(self.data[i*self.batch_size:(i+1)*self.batch_size])
+        yield self.transform(self.data[-1*self.batch_size:])
+
         
                 
 @log_time_delta
@@ -103,53 +128,62 @@ def getEmbeddingFile(name):
     
     return "D:\dataset\glove\glove.6B.300d.txt"
 
-def getDataSet(dataset):
+def getDataSet(opt):
     
-    data_dir = ".data/clean/demo"
-    files=[os.path.join(data_dir,data_name)   for data_name in ['train.txt','test.txt','dev.txt']]
+    data_dir = os.path.join(".data/clean",opt.dataset)
+    if not os.path.exists(data_dir):
+         import dataloader
+         dataset= dataloader.getDataset(opt)
 
-        
-    return files
+#    files=[os.path.join(data_dir,data_name)   for data_name in ['train.txt','test.txt','dev.txt']]
+    
+    return dataset.getFormatedData()
     
 
 def loadData(opt):
     datas = []
    
     alphabet = Alphabet(start_feature_id = 0)
-    label_alphabet= Alphabet(start_feature_id = 0,alphabet_type="label")   
-    for filename in getDataSet(opt.dataset):
+    label_alphabet= Alphabet(start_feature_id = 0,alphabet_type="label") 
+    
+    for filename in getDataSet(opt):
         df = pd.read_csv(filename,header = None,sep="\t",names=["text","label"]).fillna('0')
         df["text"]= df["text"].str.lower().str.split()
         datas.append(df)
         
     df=pd.concat(datas)
     
-    from functools import reduce 
-    word_set=reduce(lambda x,y : set(x)|set(y),df["text"])
-    alphabet.addAll(word_set)
+
     label_set = set(df["label"])
     label_alphabet.addAll(label_set)
+    
+    word_set=set()
+    [word_set.add(word)  for l in df["text"] for word in l]
+#    from functools import reduce
+#    word_set=set(reduce(lambda x,y :x+y,df["text"]))
+    
+    glove_file = getEmbeddingFile(opt.__dict__.get("embedding","glove_6b_300"))
+    loaded_vectors,embedding_size = load_text_vec(word_set,glove_file)
+    word_set = word_set & loaded_vectors.keys()
+    alphabet.addAll(word_set)  
+    
+
+#    vocab = [v for k,v in alphabet.items()]
+    vectors = getSubVectors(loaded_vectors,alphabet,embedding_size)
     
     if opt.max_seq_len==-1:
         opt.max_seq_len = df.apply(lambda row: row["text"].__len__(),axis=1).max()
     
     for data in datas:
-        data["text"]= data["text"].apply(lambda text: [alphabet.get(word,alphabet.unknow_token)  for word in text] + [alphabet.padding_token] *int(opt.max_seq_len-len(text)) )
+        data["text"]= data["text"].apply(lambda text: [alphabet.get(word,alphabet.unknow_token)  for word in text[:opt.max_seq_len]] + [alphabet.padding_token] *int(opt.max_seq_len-len(text)) )
         data["label"]=data["label"].apply(lambda text: label_alphabet.get(text))
-
-        
-    glove_file = getEmbeddingFile(opt.__dict__.get("embedding","glove_6b_300"))
-    loaded_vectors,embedding_size = load_text_vec(alphabet,glove_file)
-    vocab = [v for k,v in alphabet.items()]
-    vectors = getSubVectors(loaded_vectors,vocab,embedding_size)
-    
     opt.label_size= len(alphabet)    
     opt.vocab_size = len(label_alphabet)
     opt.embedding_dim= embedding_size
-    opt.embeddings = vectors
+    opt.embeddings = torch.FloatTensor(vectors)
    
     alphabet.dump(opt.dataset+".alphabet")              
-    return map(BucketIterator,datas)  #map(lambda x:BucketIterator(x),datas)
+    return map(lambda x:BucketIterator(x,opt),datas)#map(BucketIterator,datas)  #
     
 
 if __name__ =="__main__":

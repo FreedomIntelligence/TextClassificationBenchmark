@@ -58,12 +58,13 @@ def loadData(opt):
     return train_iter, test_iter
 
 
-def evaluation(model,test_iter):
+def evaluation(model,test_iter,from_torchtext=True):
     model.eval()
     accuracy=[]
 #    batch= next(iter(test_iter))
     for index,batch in enumerate( test_iter):
-        predicted = model(batch.text[0])
+        text = batch.text[0] if from_torchtext else batch.text
+        predicted = model(text)
         prob, idx = torch.max(predicted, 1) 
         percision=(idx== batch.label).float().mean()
         
