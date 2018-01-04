@@ -142,18 +142,16 @@ def getDataSet(opt):
     
 
 def loadData(opt):
-    datas = []
-   
+    
+    datas = []   
     alphabet = Alphabet(start_feature_id = 0)
     label_alphabet= Alphabet(start_feature_id = 0,alphabet_type="label") 
     
     for filename in getDataSet(opt):
         df = pd.read_csv(filename,header = None,sep="\t",names=["text","label"]).fillna('0')
         df["text"]= df["text"].str.lower().str.split()
-        datas.append(df)
-        
-    df=pd.concat(datas)
-    
+        datas.append(df)        
+    df=pd.concat(datas)   
 
     label_set = set(df["label"])
     label_alphabet.addAll(label_set)
@@ -167,23 +165,20 @@ def loadData(opt):
     loaded_vectors,embedding_size = load_text_vec(word_set,glove_file)
     word_set = word_set & loaded_vectors.keys()
     alphabet.addAll(word_set)  
-    
-
-#    vocab = [v for k,v in alphabet.items()]
     vectors = getSubVectors(loaded_vectors,alphabet,embedding_size)
     
     if opt.max_seq_len==-1:
         opt.max_seq_len = df.apply(lambda row: row["text"].__len__(),axis=1).max()
-    
-    for data in datas:
-        data["text"]= data["text"].apply(lambda text: [alphabet.get(word,alphabet.unknow_token)  for word in text[:opt.max_seq_len]] + [alphabet.padding_token] *int(opt.max_seq_len-len(text)) )
-        data["label"]=data["label"].apply(lambda text: label_alphabet.get(text))
     opt.label_size= len(alphabet)    
     opt.vocab_size = len(label_alphabet)
     opt.embedding_dim= embedding_size
     opt.embeddings = torch.FloatTensor(vectors)
    
-    alphabet.dump(opt.dataset+".alphabet")              
+    alphabet.dump(opt.dataset+".alphabet")     
+    for data in datas:
+        data["text"]= data["text"].apply(lambda text: [alphabet.get(word,alphabet.unknow_token)  for word in text[:opt.max_seq_len]] + [alphabet.padding_token] *int(opt.max_seq_len-len(text)) )
+        data["label"]=data["label"].apply(lambda text: label_alphabet.get(text)) 
+        
     return map(lambda x:BucketIterator(x,opt),datas)#map(BucketIterator,datas)  #
     
 
