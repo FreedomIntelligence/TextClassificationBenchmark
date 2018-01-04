@@ -4,16 +4,19 @@ class Dataset(object):
     def __init__(self,opt=None):
         if opt is not None:
             self.setup(opt)
+            self.http_proxy= opt.__dict__.get("proxy","null")
+            print(self.http_proxy)
         else:
             self.name="demo"
-            self.dirname="demo"         
+            self.dirname="demo"
+            self.http_proxy="null"
                
         self.urls=[]
-        self.root=".data_demo"
+        self.root=".data"
         self.saved_path= os.path.join(os.path.join(self.root,"clean"),self.name)
         self.formated_files=None
 
-        self.http_proxy= opt.__dict__.get("proxy","null")
+        
         
     def setup(self,opt):
 
@@ -48,7 +51,8 @@ class Dataset(object):
             opener = urllib.request.build_opener(proxy)
     # install the openen on the module-level
             urllib.request.install_opener(opener)
-        urllib.request.urlretrieve(url,path,lambda a,b,c : print("%.1f"%(100.0 * a * b / c), end='\r',flush=True) if (int(a * b / c)*100)%10==0 else None )
+            print("proxy in %s" % self.http_proxy)
+        urllib.request.urlretrieve(url,path,lambda a,b,c : print("%.1f"%(100.0 * a * b / c), end='\r',flush=True) if (int(a * b / c)*1000)%100==0 else None )
         return path
     
     def download(self,check=None):
@@ -88,6 +92,8 @@ class Dataset(object):
                     with tarfile.open(zpath, 'r:gz') as tar:
                         dirs = [member for member in tar.getmembers()]
                         tar.extractall(path=path, members=dirs)
+        else:
+            print("%s do not need to be downloaded" % path)
         return path
     
 

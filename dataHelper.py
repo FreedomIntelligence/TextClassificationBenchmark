@@ -127,7 +127,7 @@ def load_text_vec(alphabet,filename="",embedding_size=-1):
 def getEmbeddingFile(name):
     #"glove"  "w2v"
     
-    return "D:\dataset\glove\glove.6B.300d.txt"
+    return ".vector_cache\glove.6B.300d.txt"
 
 def getDataSet(opt):
     

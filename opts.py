@@ -1,4 +1,4 @@
-import argparse
+import argparse,os
 def parse_opt():
     parser = argparse.ArgumentParser()
     # Data input settings
@@ -25,7 +25,8 @@ def parse_opt():
                     help='keep_dropout')
     parser.add_argument('--max_epoch', type=int, default=20,
                     help='max_epoch')
-
+    parser.add_argument('--embedding_file', type=str, default="glove.6b.300",
+                    help='glove or w2v')
     #kim CNN
     parser.add_argument('--kernel_sizes', type=str, default="1,2,3,5",
                     help='kernel_sizes')
@@ -47,5 +48,6 @@ def parse_opt():
 #    # Check if args are valid
 #    assert args.rnn_size > 0, "rnn_size should be greater than 0"
 
-
+    if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
+        os.environ["CUDA_VISIBLE_DEVICES"] =args.gpu
     return args 
