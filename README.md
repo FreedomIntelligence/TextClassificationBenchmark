@@ -59,7 +59,6 @@ LSTM
 - [X] Data preprossing framework
 - [X] Models modules
 - [ ] Loss, Estimator and hyper-paramter tuning.
-- [ ] Estimator and hyper-paramter tuning.
 - [ ] Test modules
 - [ ] More Dataset
 - [ ] More models
