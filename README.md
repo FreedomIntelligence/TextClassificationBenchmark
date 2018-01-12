@@ -44,7 +44,7 @@ including
 Glove embeding
 Sentiment classfication dataset IMDB
 </pre>
-## How to run
+## usage
 
 Run in default  setting
 <pre><code>python main.py</code></pre>
@@ -55,6 +55,33 @@ CNN
 LSTM
 <pre><code>python main.py --model lstm</code></pre>
 
+## Road Map
+- [X] Data preprossing framework
+- [X] Models modules
+- [ ] Loss, Estimator and hyper-paramter tuning.
+- [ ] Estimator and hyper-paramter tuning.
+- [ ] Test modules
+- [ ] More Dataset
+- [ ] More models
+
+
+
+## Organisation of the repository
+The core of this repository is models and dataset.
+
+
+* ```dataloader/```: loading all dataset such as ```IMDB```, ```SST```
+
+* ```models/```: creating all models such as ```FastText```, ```LSTM```,```CNN```,```Capsule```,```QuantumCNN``` ,```Multi-Head Attention```
+
+* ```opts.py```: Parameter and config info.
+
+* ```utils.py```: tools.
+
+* ```dataHelper```: data helper
+
+
+
 ## Contributor
 -	[@Allenzhai](https://github.com/zhaizheng)
 -	[@JaredWei](https://github.com/jacobwei)
@@ -64,3 +91,4 @@ LSTM
 -	[@Wabywang](https://github.com/Wabyking)
 
 Welcome your issues and contribution!!!
+
