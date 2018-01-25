@@ -135,10 +135,16 @@ def getDataSet(opt):
     if not os.path.exists(data_dir):
          import dataloader
          dataset= dataloader.getDataset(opt)
-
+         return dataset.getFormatedData()
+    else:
+         for root, dirs, files in os.walk(data_dir):
+             for file in files:
+                 yield os.path.join(root,file)
+         
+    
 #    files=[os.path.join(data_dir,data_name)   for data_name in ['train.txt','test.txt','dev.txt']]
     
-    return dataset.getFormatedData()
+    
     
 
 def loadData(opt):
