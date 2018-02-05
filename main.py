@@ -90,10 +90,12 @@ for i in range(opt.max_epoch):
             else:
                 print("%d ieration %d epoch with loss : %.5f in %.4f seconds" % (i,epoch,loss.data.numpy()[0],time.time()-start))
 
-    percision=utils.evaluation(model,test_iter,from_torchtext=from_torchtext)
 
 
+
+
+       
+    percision=utils.evaluation(model,test_iter,from_trochtext)
     print("%d ieration with percision %.4f" % (i,percision))
 
 
-        
