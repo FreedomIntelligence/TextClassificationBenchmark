@@ -18,7 +18,11 @@
 <pre><code>pip install git+https://github.com/pytorch/text.git </code></pre>
 
 还需要有代理的话
-<pre><code>pip install git+https://github.com/pytorch/text.git --proxy dev-proxy.oa.com:8080 </code></pre>
+
+
+
+<pre><code>pip install git+https://github.com/pytorch/text.git --proxy proxy.xx.com:8080 </code></pre>
+
 
 参考链接
 https://zhuanlan.zhihu.com/p/31747695

@@ -74,6 +74,7 @@ class BucketIterator(object):
             data=data.reset_index()
             text= Variable(torch.LongTensor(data.text).cuda())
             label= Variable(torch.LongTensor([int(i) for i in data.label.tolist()]).cuda())
+
         else:
             data=data.reset_index()
             text= Variable(torch.LongTensor(data.text))
@@ -131,12 +132,28 @@ def getEmbeddingFile(name):
 
 def getDataSet(opt):
 
+
     import dataloader
     dataset= dataloader.getDataset(opt)
 
 #    files=[os.path.join(data_dir,data_name)   for data_name in ['train.txt','test.txt','dev.txt']]
     
     return dataset.getFormatedData()
+    
+    #data_dir = os.path.join(".data/clean",opt.dataset)
+    #if not os.path.exists(data_dir):
+    #     import dataloader
+    #     dataset= dataloader.getDataset(opt)
+    #     return dataset.getFormatedData()
+    #else:
+    #     for root, dirs, files in os.walk(data_dir):
+    #         for file in files:
+    #             yield os.path.join(root,file)
+         
+    
+#    files=[os.path.join(data_dir,data_name)   for data_name in ['train.txt','test.txt','dev.txt']]
+    
+    
     
 
 def loadData(opt):
