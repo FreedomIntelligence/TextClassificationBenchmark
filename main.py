@@ -32,9 +32,6 @@ from_torchtext = False
 
 opt = opts.parse_opt()
 #opt.proxy="http://dev-proxy.oa.com:8080"
-
-
-
 import os,time
 import dataHelper
 opt = opts.parse_opt()
@@ -43,10 +40,7 @@ if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
 #opt.model ='lstm'
 #opt.model ='fasttext'
 
-
-
-from_trochtext=True
-if from_trochtext:
+if from_torchtext:
     train_iter, test_iter = utils.loadData(opt)
 else:
     import dataHelper as helper
@@ -76,7 +70,7 @@ for i in range(opt.max_epoch):
         text = batch.text[0] if from_torchtext else batch.text
         predicted = model(text)
 
-        data_input =batch.text[0] if from_trochtext else batch.text
+        data_input =batch.text[0] if from_torchtext else batch.text
         predicted = model(data_input)
 
         loss= F.cross_entropy(predicted,batch.label)
@@ -95,7 +89,7 @@ for i in range(opt.max_epoch):
 
 
        
-    percision=utils.evaluation(model,test_iter,from_trochtext)
+    percision=utils.evaluation(model,test_iter,from_torchtext)
     print("%d ieration with percision %.4f" % (i,percision))
 
 

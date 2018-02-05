@@ -43,8 +43,8 @@ class Dataset(object):
         return self.formated_files
     
     def download_from_url(self,url, path, schedule=None):
-        if schedule is None:
-            schedule=lambda a,b,c : print("%.1f"%(100.0 * a * b / c), end='\r',flush=True) if (int(a * b / c)*100)%10==0 else None
+        #if schedule is None:
+        #    schedule=lambda a,b,c : print("%.1f"%(100.0 * a * b / c), end='\r',flush=True) if (int(a * b / c)*100)%10==0 else None
         if self.http_proxy != "null":
             proxy = urllib.request.ProxyHandler({'http': self.http_proxy})
     # construct a new opener using your proxy settings
@@ -52,7 +52,8 @@ class Dataset(object):
     # install the openen on the module-level
             urllib.request.install_opener(opener)
             print("proxy in %s" % self.http_proxy)
-        urllib.request.urlretrieve(url,path,lambda a,b,c : print("%.1f"%(100.0 * a * b / c), end='\r',flush=True) if (int(a * b / c)*1000)%100==0 else None )
+        #urllib.request.urlretrieve(url,path,lambda a,b,c : print("%.1f"%(100.0 * a * b / c), end='\r',flush=True) if (int(a * b / c)*1000)%100==0 else None )a
+        urllib.request.urlretrieve(url,path )
         return path
     
     def download(self,check=None):

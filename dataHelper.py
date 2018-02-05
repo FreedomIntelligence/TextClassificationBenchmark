@@ -14,6 +14,7 @@ from tqdm import tqdm
 from dataloader import Dataset
 import torch
 from torch.autograd import Variable
+from codecs import open
 
 class Alphabet(dict):
     def __init__(self, start_feature_id = 1, alphabet_type="text"):
@@ -128,7 +129,7 @@ def load_text_vec(alphabet,filename="",embedding_size=-1):
 def getEmbeddingFile(name):
     #"glove"  "w2v"
     
-    return ".vector_cache\glove.6B.300d.txt"
+    return os.path.join( ".vector_cache","glove.6B.300d.txt")
 
 def getDataSet(opt):
 
@@ -178,7 +179,7 @@ def loadData(opt):
     
     glove_file = getEmbeddingFile(opt.__dict__.get("embedding","glove_6b_300"))
     loaded_vectors,embedding_size = load_text_vec(word_set,glove_file)
-    word_set = word_set & loaded_vectors.keys()
+    word_set = word_set & set(loaded_vectors.keys())
     alphabet.addAll(word_set)  
     vectors = getSubVectors(loaded_vectors,alphabet,embedding_size)
     

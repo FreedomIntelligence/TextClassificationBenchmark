@@ -1,6 +1,7 @@
 from .Dataset import Dataset
 import os
 import pandas as pd
+from codecs import open
 
 class IMDBDataset(Dataset):
     def __init__(self,opt=None,**kwargs):
