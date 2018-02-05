@@ -25,6 +25,8 @@ We have done some dataset and models
 - InceptionCNN
 - LSTM
 - FastText
+- Capsule
+- Quantum-inspired NN
 
 
 ## Libary
@@ -33,7 +35,7 @@ You should have install [these librarys](docs/windows_torch.md)
 <pre>
 python3
 torch
-torchtext
+torchtext (optional)
 </pre>
 
 ## Dataset 
