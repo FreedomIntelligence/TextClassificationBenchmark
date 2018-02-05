@@ -25,20 +25,20 @@ from torchtext import datasets
 from torchtext.vocab import Vectors, GloVe, CharNGram, FastText
 from torch.nn.modules.loss import NLLLoss,MultiLabelSoftMarginLoss,MultiLabelMarginLoss,BCELoss
 
-import time
+import time,os
 
 
 from_torchtext = False
 
 opt = opts.parse_opt()
 #opt.proxy="http://dev-proxy.oa.com:8080"
-import os,time
+
 import dataHelper
 opt = opts.parse_opt()
 if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
     os.environ["CUDA_VISIBLE_DEVICES"] =opt.gpu
 #opt.model ='lstm'
-#opt.model ='fasttext'
+opt.model ='capsule'
 
 if from_torchtext:
     train_iter, test_iter = utils.loadData(opt)
@@ -70,9 +70,6 @@ for i in range(opt.max_epoch):
         text = batch.text[0] if from_torchtext else batch.text
         predicted = model(text)
 
-        data_input =batch.text[0] if from_torchtext else batch.text
-        predicted = model(data_input)
-
         loss= F.cross_entropy(predicted,batch.label)
 
         loss.backward()
@@ -83,12 +80,7 @@ for i in range(opt.max_epoch):
                 print("%d ieration %d epoch with loss : %.5f in %.4f seconds" % (i,epoch,loss.cpu().data.numpy()[0],time.time()-start))
             else:
                 print("%d ieration %d epoch with loss : %.5f in %.4f seconds" % (i,epoch,loss.data.numpy()[0],time.time()-start))
-
-
-
-
-
-       
+ 
     percision=utils.evaluation(model,test_iter,from_torchtext)
     print("%d ieration with percision %.4f" % (i,percision))
 
