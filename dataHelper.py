@@ -11,7 +11,7 @@ import time
 import pickle
 from utils import log_time_delta
 from tqdm import tqdm
-from dataloader import Dataset
+from dataloader import Dataset, Glove
 import torch
 from torch.autograd import Variable
 from codecs import open
@@ -129,7 +129,7 @@ def load_text_vec(alphabet,filename="",embedding_size=-1):
 def getEmbeddingFile(name):
     #"glove"  "w2v"
     
-    return os.path.join( ".vector_cache","glove.6B.300d.txt")
+    return os.path.join( ".vector_cache", "6b", "glove.6B.300d.txt")
 
 def getDataSet(opt):
 
@@ -177,6 +177,7 @@ def loadData(opt):
 #    from functools import reduce
 #    word_set=set(reduce(lambda x,y :x+y,df["text"]))
     
+    Glove(corpus="6b", dim=300).process()
     glove_file = getEmbeddingFile(opt.__dict__.get("embedding","glove_6b_300"))
     loaded_vectors,embedding_size = load_text_vec(word_set,glove_file)
     word_set = word_set & set(loaded_vectors.keys())
