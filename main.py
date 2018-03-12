@@ -9,10 +9,6 @@ from torch.autograd import Variable
 import torch.optim as optim
 import numpy as np
 
-
-
-
-
 from six.moves import cPickle
 
 import opts
@@ -38,8 +34,9 @@ opt = opts.parse_opt()
 if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
     os.environ["CUDA_VISIBLE_DEVICES"] =opt.gpu
 #opt.model ='lstm'
-opt.model ='capsule'
-
+#opt.model ='capsule'
+opt.position=True
+opt.model="transformer"
 if from_torchtext:
     train_iter, test_iter = utils.loadData(opt)
 else:
