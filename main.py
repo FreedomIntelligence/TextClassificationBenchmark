@@ -31,7 +31,7 @@ import time,os
 from_torchtext = False
 
 opt = opts.parse_opt()
-#opt.proxy="http://dev-proxy.xxxx.com:8080"
+#opt.proxy="http://xxxx.xxxx.com:8080"
 
 import dataHelper
 opt = opts.parse_opt()
