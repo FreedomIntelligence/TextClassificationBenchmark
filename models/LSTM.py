@@ -42,7 +42,7 @@ class LSTMClassifier(nn.Module):
         x=embeds.permute(1,0,2) #200x64x300
         self.hidden= self.init_hidden(sentence.size()[0]) #1x64x128
         lstm_out, self.hidden = self.lstm(x, self.hidden) #200x64x128
-        if self.mean:
+        if self.mean=="mean":
             out = lstm_out.permute(1,0,2)
             final = torch.mean(out,1)
         else:

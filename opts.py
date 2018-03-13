@@ -37,7 +37,7 @@ def parse_opt():
                     help='kernel_nums')
     parser.add_argument('--embedding_type', type=str, default="non-static",
                     help='embedding_type')
-    parser.add_argument('--lstm_mean', type=bool, default=True,
+    parser.add_argument('--lstm_mean', type=str, default="mean",# last
                     help='lstm_mean')
     parser.add_argument('--gpu', type=str, default="0",
                     help='gpu number')

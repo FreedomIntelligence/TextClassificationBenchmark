@@ -29,7 +29,7 @@ from_torchtext = False
 opt = opts.parse_opt()
 #opt.proxy="http://xxxx.xxxx.com:8080"
 
-
+print(opt.lstm_mean)
 
 if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
     os.environ["CUDA_VISIBLE_DEVICES"] =opt.gpu

@@ -46,7 +46,7 @@ class LSTMBI(nn.Module):
         x=embeds.permute(1,0,2)
         self.hidden= self.init_hidden(sentence.size()[0]) #2x64x64
         lstm_out, self.hidden = self.bilstm(x, self.hidden)  #lstm_out:200x64x128
-        if self.mean:
+        if self.mean=="mean":
             out = lstm_out.permute(1,0,2)
             final = torch.mean(out,1)
         else:
