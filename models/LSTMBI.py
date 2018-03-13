@@ -25,6 +25,7 @@ class LSTMBI(nn.Module):
         self.bilstm = nn.LSTM(opt.embedding_dim, opt.hidden_dim // 2, num_layers=self.num_layers, dropout=self.dropout, bidirectional=True)
         self.hidden2label = nn.Linear(opt.hidden_dim, opt.label_size)
         self.hidden = self.init_hidden()
+        self.mean = opt.__dict__.get("lstm_mean",True) 
 
     def init_hidden(self,batch_size=None):
         if batch_size is None:
@@ -45,8 +46,10 @@ class LSTMBI(nn.Module):
         x=embeds.permute(1,0,2)
         self.hidden= self.init_hidden(sentence.size()[0]) #2x64x64
         lstm_out, self.hidden = self.bilstm(x, self.hidden)  #lstm_out:200x64x128
-        forward = lstm_out[:, :, :self.h_dim] 
-        backward= lstm_out[:, :, self.h_dim:]
-        y  = self.hidden2label(lstm_out[-1]) #64x3
+        if self.mean:
+            out = lstm_out.permute(1,0,2)
+            final = torch.mean(out,1)
+        else:
+            final=lstm_out[-1]
+        y  = self.hidden2label(final) #64x3  #lstm_out[-1]
         return y
-

@@ -17,7 +17,7 @@ def parse_opt():
     parser.add_argument('--grad_clip', type=float, default=1e-1,
                     help='grad_clip')
 
-    parser.add_argument('--model', type=str, default="transformer",
+    parser.add_argument('--model', type=str, default="bilstm",
                     help='model name')
     parser.add_argument('--dataset', type=str, default="imdb",
                     help='dataset')
@@ -37,6 +37,8 @@ def parse_opt():
                     help='kernel_nums')
     parser.add_argument('--embedding_type', type=str, default="non-static",
                     help='embedding_type')
+    parser.add_argument('--lstm_mean', type=bool, default=True,
+                    help='lstm_mean')
     parser.add_argument('--gpu', type=str, default="0",
                     help='gpu number')
     parser.add_argument('--proxy', type=str, default="null",
