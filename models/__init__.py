@@ -20,7 +20,7 @@ from .Capsule import CapsuleNet
 from .RCNN import RCNN
 from .RNN_CNN import RNN_CNN
 from .LSTMBI import LSTMBI
-
+from .Transformer import AttentionIsAllYouNeed
 def setup(opt):
     
     if opt.model == 'lstm':
@@ -47,7 +47,8 @@ def setup(opt):
         model = RCNN(opt)
     elif opt.model ==  'bilstm':
         model = LSTMBI(opt)
-
+    elif opt.model == "transformer":
+        model = AttentionIsAllYouNeed(opt)
     else:
         raise Exception("model not supported: {}".format(opt.model))
     return model

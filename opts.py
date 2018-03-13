@@ -21,6 +21,9 @@ def parse_opt():
                     help='model name')
     parser.add_argument('--dataset', type=str, default="imdb",
                     help='dataset')
+    parser.add_argument('--position', type=bool, default=False,
+                    help='gpu number')
+    
     parser.add_argument('--keep_dropout', type=float, default=0.8,
                     help='keep_dropout')
     parser.add_argument('--max_epoch', type=int, default=20,
@@ -39,6 +42,8 @@ def parse_opt():
     parser.add_argument('--proxy', type=str, default="null",
                     help='http://proxy.xx.com:8080')
     
+    
+    
 #
     args = parser.parse_args()
 
@@ -50,4 +55,9 @@ def parse_opt():
 
     if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
         os.environ["CUDA_VISIBLE_DEVICES"] =args.gpu
+    
+    if args.model=="transformer":
+        args.position=True
+    print("papameter parsing done")
+        
     return args 

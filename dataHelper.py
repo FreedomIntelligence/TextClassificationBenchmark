@@ -59,29 +59,41 @@ class DottableDict(dict):
             self.__dict__ = dict()
             
 class BucketIterator(object):
-    def __init__(self,data,opt=None,batch_size=2,shuffle=True):
+    def __init__(self,data,opt=None,batch_size=2,shuffle=True,test=False,position=False):
         self.shuffle=shuffle
         self.data=data
         self.batch_size=batch_size
+        self.test=test        
         if opt is not None:
             self.setup(opt)
     def setup(self,opt):
         
         self.batch_size=opt.batch_size
         self.shuffle=opt.__dict__.get("shuffle",self.shuffle)
+        self.position=opt.__dict__.get("position",False)
+        self.padding_token =  opt.alphabet.padding_token
     
     def transform(self,data):
         if torch.cuda.is_available():
             data=data.reset_index()
             text= Variable(torch.LongTensor(data.text).cuda())
-            label= Variable(torch.LongTensor([int(i) for i in data.label.tolist()]).cuda())
-
+            label= Variable(torch.LongTensor([int(i) for i in data.label.tolist()]).cuda())                
         else:
             data=data.reset_index()
             text= Variable(torch.LongTensor(data.text))
             label= Variable(torch.LongTensor(data.label.tolist()))
+        if self.position:
+            position_tensor = self.get_position(data.text)
+            return DottableDict({"text":(text,position_tensor),"label":label})
         return DottableDict({"text":text,"label":label})
     
+    def get_position(self,inst_data):
+        inst_position = np.array([[pos_i+1 if w_i != self.padding_token else 0 for pos_i, w_i in enumerate(inst)] for inst in inst_data])
+        inst_position_tensor = Variable( torch.LongTensor(inst_position), volatile=self.test) 
+        if torch.cuda.is_available():
+            inst_position_tensor=inst_position_tensor.cuda()
+        return inst_position_tensor
+
     def __iter__(self):
         if self.shuffle:
             self.data = self.data.sample(frac=1).reset_index(drop=True)
@@ -89,6 +101,7 @@ class BucketIterator(object):
         for  i in range(batch_nums):
             yield self.transform(self.data[i*self.batch_size:(i+1)*self.batch_size])
         yield self.transform(self.data[-1*self.batch_size:])
+    
 
         
                 
@@ -157,7 +170,9 @@ def getDataSet(opt):
     
     
 
-def loadData(opt):
+def loadData(opt,embedding=True):
+    if embedding==False:
+        return loadDataWithoutEmbedding(opt)
     
     datas = []   
     alphabet = Alphabet(start_feature_id = 0)
@@ -185,17 +200,28 @@ def loadData(opt):
     
     if opt.max_seq_len==-1:
         opt.max_seq_len = df.apply(lambda row: row["text"].__len__(),axis=1).max()
-    opt.label_size= len(alphabet)    
-    opt.vocab_size = len(label_alphabet)
+    opt.vocab_size= len(alphabet)    
+    opt.label_size= len(label_alphabet)
     opt.embedding_dim= embedding_size
     opt.embeddings = torch.FloatTensor(vectors)
-   
+    opt.alphabet=alphabet
     alphabet.dump(opt.dataset+".alphabet")     
     for data in datas:
         data["text"]= data["text"].apply(lambda text: [alphabet.get(word,alphabet.unknow_token)  for word in text[:opt.max_seq_len]] + [alphabet.padding_token] *int(opt.max_seq_len-len(text)) )
         data["label"]=data["label"].apply(lambda text: label_alphabet.get(text)) 
         
     return map(lambda x:BucketIterator(x,opt),datas)#map(BucketIterator,datas)  #
+
+def loadDataWithoutEmbedding(opt):
+    datas=[]
+    for filename in getDataSet(opt):
+        df = pd.read_csv(filename,header = None,sep="\t",names=["text","label"]).fillna('0')
+        df["text"]= df["text"].str.lower()
+        datas.append((df["text"],df["label"]))
+    return datas
+    
+
+
     
 
 if __name__ =="__main__":

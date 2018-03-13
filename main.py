@@ -9,10 +9,6 @@ from torch.autograd import Variable
 import torch.optim as optim
 import numpy as np
 
-
-
-
-
 from six.moves import cPickle
 
 import opts
@@ -31,14 +27,14 @@ import time,os
 from_torchtext = False
 
 opt = opts.parse_opt()
-#opt.proxy="http://dev-proxy.oa.com:8080"
+#opt.proxy="http://xxxx.xxxx.com:8080"
 
 import dataHelper
 opt = opts.parse_opt()
 if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
     os.environ["CUDA_VISIBLE_DEVICES"] =opt.gpu
 #opt.model ='lstm'
-opt.model ='capsule'
+#opt.model ='capsule'
 
 if from_torchtext:
     train_iter, test_iter = utils.loadData(opt)
@@ -77,11 +73,11 @@ for i in range(opt.max_epoch):
         optimizer.step()
         if epoch% 100==0:
             if  torch.cuda.is_available():
-                print("%d ieration %d epoch with loss : %.5f in %.4f seconds" % (i,epoch,loss.cpu().data.numpy()[0],time.time()-start))
+                print("%d iteration %d epoch with loss : %.5f in %.4f seconds" % (i,epoch,loss.cpu().data.numpy()[0],time.time()-start))
             else:
-                print("%d ieration %d epoch with loss : %.5f in %.4f seconds" % (i,epoch,loss.data.numpy()[0],time.time()-start))
+                print("%d iteration %d epoch with loss : %.5f in %.4f seconds" % (i,epoch,loss.data.numpy()[0],time.time()-start))
  
     percision=utils.evaluation(model,test_iter,from_torchtext)
-    print("%d ieration with percision %.4f" % (i,percision))
+    print("%d iteration with percision %.4f" % (i,percision))
 
 
