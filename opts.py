@@ -58,6 +58,6 @@ def parse_opt():
     
     if args.model=="transformer":
         args.position=True
-    print("papameter parsing done")
+
         
     return args 

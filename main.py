@@ -20,7 +20,7 @@ from torchtext import data
 from torchtext import datasets
 from torchtext.vocab import Vectors, GloVe, CharNGram, FastText
 from torch.nn.modules.loss import NLLLoss,MultiLabelSoftMarginLoss,MultiLabelMarginLoss,BCELoss
-
+import dataHelper
 import time,os
 
 
@@ -29,8 +29,8 @@ from_torchtext = False
 opt = opts.parse_opt()
 #opt.proxy="http://xxxx.xxxx.com:8080"
 
-import dataHelper
-opt = opts.parse_opt()
+
+
 if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
     os.environ["CUDA_VISIBLE_DEVICES"] =opt.gpu
 #opt.model ='lstm'

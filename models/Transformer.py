@@ -293,7 +293,7 @@ class Encoder(nn.Module):
         if return_attns:
             return enc_output, enc_slf_attns
         else:
-            return enc_output,
+            return enc_output
 
 class Decoder(nn.Module):
     ''' A decoder model with self attention mechanism. '''
@@ -423,7 +423,7 @@ class AttentionIsAllYouNeed(nn.Module):
 
          src_seq,src_pos = inp
 #         enc_output, *_ = self.encoder(src_seq, src_pos)   #64x200x512
-         enc_output, _ = self.encoder(src_seq, src_pos)   #64x200x512
+         enc_output = self.encoder(src_seq, src_pos)   #64x200x512
          return  self.hidden2label(enc_output.view((enc_output.shape[0],-1)))
          
          
