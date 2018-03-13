@@ -17,7 +17,7 @@ def parse_opt():
     parser.add_argument('--grad_clip', type=float, default=1e-1,
                     help='grad_clip')
 
-    parser.add_argument('--model', type=str, default="bilstm",
+    parser.add_argument('--model', type=str, default="selfattention",
                     help='model name')
     parser.add_argument('--dataset', type=str, default="imdb",
                     help='dataset')

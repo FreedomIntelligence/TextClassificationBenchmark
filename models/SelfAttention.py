@@ -9,11 +9,11 @@ import torch
 from torch.autograd import Variable
 #from memory_profiler import profile
 
-class LSTMBI(nn.Module):
+class SelfAttention(nn.Module):
     # embedding_dim, hidden_dim, vocab_size, label_size, batch_size, use_gpu
     def __init__(self,opt):
         self.opt=opt
-        super(LSTMBI, self).__init__()
+        super(SelfAttention, self).__init__()
         self.hidden_dim = opt.hidden_dim
         self.batch_size = opt.batch_size
         self.use_gpu = torch.cuda.is_available()
@@ -28,7 +28,11 @@ class LSTMBI(nn.Module):
         self.bilstm = nn.LSTM(opt.embedding_dim, opt.hidden_dim // 2, num_layers=self.num_layers, dropout=self.dropout, bidirectional=True)
         self.hidden2label = nn.Linear(opt.hidden_dim, opt.label_size)
         self.hidden = self.init_hidden()
-
+        self.self_attention = nn.Sequential(
+            nn.Linear(opt.hidden_dim, 24),
+            nn.ReLU(True),
+            nn.Linear(24,1)
+            )
     def init_hidden(self,batch_size=None):
         if batch_size is None:
             batch_size= self.batch_size
@@ -48,5 +52,10 @@ class LSTMBI(nn.Module):
         x=embeds.permute(1,0,2)
         self.hidden= self.init_hidden(sentence.size()[0]) #2x64x64
         lstm_out, self.hidden = self.bilstm(x, self.hidden)  #lstm_out:200x64x128
-        y  = self.hidden2label(lstm_out[-1]) #64x3
+        final =lstm_out.permute(1,0,2)#torch.mean(,1) 
+        attn_ene = self.self_attention(final)
+        attns =F.softmax(attn_ene.view(self.batch_size, -1), dim=1).unsqueeze(2)
+        feats = (final * attns).sum(dim=1)
+        y  = self.hidden2label(feats) #64x3
+        
         return y
