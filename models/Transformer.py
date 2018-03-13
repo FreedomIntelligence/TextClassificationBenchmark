@@ -419,6 +419,7 @@ class AttentionIsAllYouNeed(nn.Module):
             d_word_vec=d_word_vec, d_model=d_model,
             d_inner_hid=d_inner_hid, dropout=dropout)
          self.hidden2label = nn.Linear(opt.max_seq_len*d_model, opt.label_size)
+         self.batch_size=opt.batch_size
      def forward(self, inp):
 
          src_seq,src_pos = inp
