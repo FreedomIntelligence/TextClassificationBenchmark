@@ -409,18 +409,21 @@ class Transformer(nn.Module):
     
 class AttentionIsAllYouNeed(nn.Module):
      def __init__(self, opt, n_layers=6, n_head=8,
-            d_word_vec=512, d_model=512, d_inner_hid=1024, d_k=64, d_v=64,
+            d_word_vec=128, d_model=128, d_inner_hid=256, d_k=32, d_v=32,
             dropout=0.1, proj_share_weight=True, embs_share_weight=True):
+#          self, opt, n_layers=6, n_head=8, d_word_vec=512, d_model=512, d_inner_hid=1024, d_k=64, d_v=64,
+            
          super(AttentionIsAllYouNeed, self).__init__() 
          self.encoder = Encoder(
             opt.vocab_size, opt.max_seq_len, n_layers=n_layers, n_head=n_head,
             d_word_vec=d_word_vec, d_model=d_model,
             d_inner_hid=d_inner_hid, dropout=dropout)
+         self.hidden2label = nn.Linear(opt.max_seq_len*d_model, opt.label_size)
      def forward(self, inp):
 
          src_seq,src_pos = inp
          enc_output, *_ = self.encoder(src_seq, src_pos)   #64x200x512
-         return  enc_output.view((enc_output.shape[0],-1))
+         return  self.hidden2label(enc_output.view((enc_output.shape[0],-1)))
          
          
     

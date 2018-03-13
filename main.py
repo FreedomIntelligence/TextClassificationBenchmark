@@ -35,8 +35,7 @@ if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
     os.environ["CUDA_VISIBLE_DEVICES"] =opt.gpu
 #opt.model ='lstm'
 #opt.model ='capsule'
-opt.position=True
-opt.model="transformer"
+
 if from_torchtext:
     train_iter, test_iter = utils.loadData(opt)
 else:

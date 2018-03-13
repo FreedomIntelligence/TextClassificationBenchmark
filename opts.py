@@ -55,5 +55,8 @@ def parse_opt():
 
     if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
         os.environ["CUDA_VISIBLE_DEVICES"] =args.gpu
+    
+    if args.model="transformer":
+        args.position=True
         
     return args 
