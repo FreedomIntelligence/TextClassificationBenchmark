@@ -156,7 +156,8 @@ def getSubVectors(opt,alphabet):
             with open("unknown.txt","w",encoding="utf-8") as f:
                 unknown_set = set(alphabet.keys()) - set(loaded_vectors.keys())
                 f.write("\n".join( unknown_set))
-        pickle.dump(vectors,open(pickle_filename,"wb"))
+        if  opt.debug:
+            pickle.dump(vectors,open(pickle_filename,"wb"))
         return vectors
     else:
         return pickle.load(open(pickle_filename,"rb"))
@@ -202,7 +203,8 @@ def get_clean_datas(opt):
         #        df["text"]= df["text"].apply(clean).str.lower().str.split() #replace("[\",:#]"," ")
             df["text"]= df["text"].apply(clean)
             datas.append(df)
-        pickle.dump(datas,open(pickle_filename,"wb"))
+        if  opt.debug:
+            pickle.dump(datas,open(pickle_filename,"wb"))
         return datas
     else:
         return pickle.load(open(pickle_filename,"rb"))
