@@ -19,10 +19,10 @@ class LSTMBI(nn.Module):
         self.word_embeddings.weight = nn.Parameter(opt.embeddings)
 #        self.word_embeddings.weight.data.copy_(torch.from_numpy(opt.embeddings))
   
-        self.num_layers = 1
+        self.lstm_layers = opt.lstm_layers
         #self.bidirectional = True
         self.dropout = opt.keep_dropout
-        self.bilstm = nn.LSTM(opt.embedding_dim, opt.hidden_dim // 2, num_layers=self.num_layers, dropout=self.dropout, bidirectional=True)
+        self.bilstm = nn.LSTM(opt.embedding_dim, opt.hidden_dim // 2, num_layers=self.lstm_layers, dropout=self.dropout, bidirectional=True)
         self.hidden2label = nn.Linear(opt.hidden_dim, opt.label_size)
         self.hidden = self.init_hidden()
         self.mean = opt.__dict__.get("lstm_mean",True) 
@@ -32,11 +32,11 @@ class LSTMBI(nn.Module):
             batch_size= self.batch_size
         
         if self.use_gpu:
-            h0 = Variable(torch.zeros(2*self.num_layers, batch_size, self.hidden_dim // 2).cuda())
-            c0 = Variable(torch.zeros(2*self.num_layers, batch_size, self.hidden_dim // 2).cuda())
+            h0 = Variable(torch.zeros(2*self.lstm_layers, batch_size, self.hidden_dim // 2).cuda())
+            c0 = Variable(torch.zeros(2*self.lstm_layers, batch_size, self.hidden_dim // 2).cuda())
         else:
-            h0 = Variable(torch.zeros(2*self.num_layers, batch_size, self.hidden_dim // 2))
-            c0 = Variable(torch.zeros(2*self.num_layers, batch_size, self.hidden_dim // 2))
+            h0 = Variable(torch.zeros(2*self.lstm_layers, batch_size, self.hidden_dim // 2))
+            c0 = Variable(torch.zeros(2*self.lstm_layers, batch_size, self.hidden_dim // 2))
         return (h0, c0)
 #    @profile
     def forward(self, sentence):

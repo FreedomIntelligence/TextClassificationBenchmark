@@ -18,7 +18,7 @@ class LSTMAttention(torch.nn.Module):
         self.word_embeddings.weight = nn.Parameter(opt.embeddings)
 #        self.word_embeddings.weight.data.copy_(torch.from_numpy(opt.embeddings))
   
-        self.num_layers = 1
+        self.num_layers = opt.lstm_layers
         #self.bidirectional = True
         self.dropout = opt.keep_dropout
         self.bilstm = nn.LSTM(opt.embedding_dim, opt.hidden_dim // 2, batch_first=True,num_layers=self.num_layers, dropout=self.dropout, bidirectional=True)

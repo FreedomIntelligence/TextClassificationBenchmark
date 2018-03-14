@@ -41,6 +41,7 @@ else:
     import dataHelper as helper
     train_iter, test_iter = dataHelper.loadData(opt)
 
+opt.lstm_layers=2
 
 model=models.setup(opt)
 if torch.cuda.is_available():
