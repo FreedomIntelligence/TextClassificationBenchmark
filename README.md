@@ -34,7 +34,7 @@ We have done some dataset and models
 
 ## Libary
 
-You should have install [these librarys](docs/windows_torch.md)
+You should have install [these librarys](docs/windows_torch_en.md)
 <pre>
 python3
 torch
@@ -42,7 +42,7 @@ torchtext (optional)
 </pre>
 
 ## Dataset 
-Dataset will be automatically configured in current path, or download manually your data in [Dataset](docs/data_config.md),  step-by step.
+Dataset will be automatically configured in current path, or download manually your data in [Dataset](docs/data_config_en.md),  step-by step.
 
 including
 <pre>
