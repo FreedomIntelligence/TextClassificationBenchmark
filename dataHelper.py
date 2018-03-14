@@ -106,7 +106,7 @@ class BucketIterator(object):
         
                 
 @log_time_delta
-def getSubVectors(vectors,vocab,dim):
+def vectors_lookup(vectors,vocab,dim):
     embedding = np.zeros((len(vocab),dim))
     count = 1
     for word in vocab:
@@ -143,13 +143,25 @@ def getEmbeddingFile(name):
     #"glove"  "w2v"
     
     return os.path.join( ".vector_cache","glove.6B.300d.txt")
-
+@log_time_delta
+def getSubVectors(opt,alphabet):
+    pickle_filename = "temp/"+opt.dataset+".vec"
+    if not os.path.exists(pickle_filename) or opt.debug:    
+        glove_file = getEmbeddingFile(opt.__dict__.get("embedding","glove_6b_300"))
+        loaded_vectors,embedding_size = load_text_vec(alphabet.keys(),glove_file)  
+        vectors = vectors_lookup(loaded_vectors,alphabet,embedding_size)
+        if opt.debug:
+            with open("unknown.txt","w",encoding="utf-8") as f:
+                unknown_set = set(alphabet.keys()) - set(loaded_vectors.keys())
+                f.write("\n".join( unknown_set))
+        pickle.dump(vectors,open(pickle_filename,"wb"))
+        return vectors
+    else:
+        return pickle.load(open(pickle_filename,"rb"))
+    
 def getDataSet(opt):
-
-
     import dataloader
     dataset= dataloader.getDataset(opt)
-
 #    files=[os.path.join(data_dir,data_name)   for data_name in ['train.txt','test.txt','dev.txt']]
     
     return dataset.getFormatedData()
@@ -177,23 +189,32 @@ def clean(text):
 #    print("%s $$$$$ %s" %(pre,text))     
 
     return text.lower().split()
+@log_time_delta
+def get_clean_datas(opt):
+    pickle_filename = "temp/"+opt.dataset+".data"
+    if not os.path.exists(pickle_filename) or opt.debug: 
+        datas = [] 
+        for filename in getDataSet(opt):
+            df = pd.read_csv(filename,header = None,sep="\t",names=["text","label"]).fillna('0')
+    
+        #        df["text"]= df["text"].apply(clean).str.lower().str.split() #replace("[\",:#]"," ")
+            df["text"]= df["text"].apply(clean)
+            datas.append(df)
+        pickle.dump(datas,open(pickle_filename,"wb"))
+        return datas
+    else:
+        return pickle.load(open(pickle_filename,"rb"))
+    
 
-   
-
-def loadData(opt,embedding=True,debug=False):
+def loadData(opt,embedding=True):
     if embedding==False:
         return loadDataWithoutEmbedding(opt)
     
-    datas = []   
+    datas =get_clean_datas(opt)
+    
     alphabet = Alphabet(start_feature_id = 0)
     label_alphabet= Alphabet(start_feature_id = 0,alphabet_type="label") 
-    
-    for filename in getDataSet(opt):
-        df = pd.read_csv(filename,header = None,sep="\t",names=["text","label"]).fillna('0')
 
-    #        df["text"]= df["text"].apply(clean).str.lower().str.split() #replace("[\",:#]"," ")
-        df["text"]= df["text"].apply(clean)
-        datas.append(df) 
     
     df=pd.concat(datas)   
     df.to_csv("demo.text",sep="\t",index=False)
@@ -204,25 +225,19 @@ def loadData(opt,embedding=True,debug=False):
     [word_set.add(word)  for l in df["text"] if l is not None for word in l ]
 #    from functools import reduce
 #    word_set=set(reduce(lambda x,y :x+y,df["text"]))            
-            
-    glove_file = getEmbeddingFile(opt.__dict__.get("embedding","glove_6b_300"))
-    loaded_vectors,embedding_size = load_text_vec(word_set,glove_file)
-    word_set_intersection = word_set #& set(loaded_vectors.keys())
+   
+    alphabet.addAll(word_set)
 
-    alphabet.addAll(word_set_intersection)  
-    vectors = getSubVectors(loaded_vectors,alphabet,embedding_size)
-    if debug:
-        with open("unknown.txt","w",encoding="utf-8") as f:
-            unknown_set = word_set - set(loaded_vectors.keys())
-            f.write("\n".join( unknown_set))
+    vectors = getSubVectors(opt,alphabet)  
+    
     if opt.max_seq_len==-1:
         opt.max_seq_len = df.apply(lambda row: row["text"].__len__(),axis=1).max()
     opt.vocab_size= len(alphabet)    
     opt.label_size= len(label_alphabet)
-    opt.embedding_dim= embedding_size
+    opt.embedding_dim= vectors.shape[-1]
     opt.embeddings = torch.FloatTensor(vectors)
     opt.alphabet=alphabet
-    alphabet.dump(opt.dataset+".alphabet")     
+#    alphabet.dump(opt.dataset+".alphabet")     
     for data in datas:
         data["text"]= data["text"].apply(lambda text: [alphabet.get(word,alphabet.unknow_token)  for word in text[:opt.max_seq_len]] + [alphabet.padding_token] *int(opt.max_seq_len-len(text)) )
         data["label"]=data["label"].apply(lambda text: label_alphabet.get(text)) 
@@ -247,6 +262,6 @@ if __name__ =="__main__":
     opt.max_seq_len=-1
     import dataloader
     dataset= dataloader.getDataset(opt)
-#    datas=loadData(opt)
+    datas=loadData(opt)
     
 

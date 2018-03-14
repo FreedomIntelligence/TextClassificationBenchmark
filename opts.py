@@ -45,6 +45,8 @@ def parse_opt():
                     help='gpu number')
     parser.add_argument('--proxy', type=str, default="null",
                     help='http://proxy.xx.com:8080')
+    parser.add_argument('--debug', type=str, default="false",
+                    help='gpu number')
     
     
     
@@ -64,6 +66,10 @@ def parse_opt():
         args.position=True
     else:
         args.position=False
+    if args.debug.lower() =="true":
+        args.debug = True
+    else:
+        args.debug = False
 
         
     return args 
