@@ -44,7 +44,7 @@ class LSTMAttention(torch.nn.Module):
         merged_state = merged_state.squeeze(0).unsqueeze(2)
         # (batch, seq_len, cell_size) * (batch, cell_size, 1) = (batch, seq_len, 1)
         weights = torch.bmm(rnn_out, merged_state)
-        weights = torch.nn.functional.softmax(weights.squeeze(2),1).unsqueeze(2)
+        weights = torch.nn.functional.softmax(weights.squeeze(2)).unsqueeze(2)
         # (batch, cell_size, seq_len) * (batch, seq_len, 1) = (batch, cell_size, 1)
         return torch.bmm(torch.transpose(rnn_out, 1, 2), weights).squeeze(2)
     # end method attention
