@@ -8,14 +8,16 @@ import pandas as pd
 from tqdm import tqdm
 import random
 import time
-import pickle
 from utils import log_time_delta
 from tqdm import tqdm
 from dataloader import Dataset
 import torch
 from torch.autograd import Variable
 from codecs import open
-
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 class Alphabet(dict):
     def __init__(self, start_feature_id = 1, alphabet_type="text"):
         self.fid = start_feature_id
