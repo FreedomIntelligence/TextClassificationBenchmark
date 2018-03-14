@@ -49,7 +49,7 @@ model.train()
 print("# parameters:", sum(param.numel() for param in model.parameters()))
 optimizer = optim.Adam(model.parameters(), lr=opt.learning_rate)
 optimizer.zero_grad()
-loss_fun = F.cross_entropy()
+loss_fun = F.cross_entropy
 
 #batch = next(iter(train_iter))
 
