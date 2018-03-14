@@ -207,14 +207,14 @@ def loadData(opt,embedding=True,debug=False):
             
     glove_file = getEmbeddingFile(opt.__dict__.get("embedding","glove_6b_300"))
     loaded_vectors,embedding_size = load_text_vec(word_set,glove_file)
-    word_set_intersection = word_set & set(loaded_vectors.keys())
+    word_set_intersection = word_set #& set(loaded_vectors.keys())
+
+    alphabet.addAll(word_set_intersection)  
+    vectors = getSubVectors(loaded_vectors,alphabet,embedding_size)
     if debug:
         with open("unknown.txt","w",encoding="utf-8") as f:
             unknown_set = word_set - set(loaded_vectors.keys())
             f.write("\n".join( unknown_set))
-    alphabet.addAll(word_set_intersection)  
-    vectors = getSubVectors(loaded_vectors,alphabet,embedding_size)
-    
     if opt.max_seq_len==-1:
         opt.max_seq_len = df.apply(lambda row: row["text"].__len__(),axis=1).max()
     opt.vocab_size= len(alphabet)    

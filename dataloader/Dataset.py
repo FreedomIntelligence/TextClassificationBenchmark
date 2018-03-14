@@ -5,7 +5,7 @@ class Dataset(object):
         if opt is not None:
             self.setup(opt)
             self.http_proxy= opt.__dict__.get("proxy","null")
-            print(self.http_proxy)
+
         else:
             self.name="demo"
             self.dirname="demo"
