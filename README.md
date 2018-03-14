@@ -19,18 +19,16 @@ We have done some dataset and models
 - Trec
 
 ### Models done
-- BasicCNN
-- KimCNN
-- MultiLayerCNN
-- InceptionCNN
-- LSTM
 - FastText
-
-
+- BasicCNN (KimCNN,MultiLayerCNN, Multi-perspective CNN)
+- InceptionCNN
+- LSTM (BILSTM, StackLSTM)
+- LSTM with Attention (Self Attention / Quantum Attention)
+- Hybrids between CNN and RNN (RCNN, C-LSTM)
+- Transformer - Attention is all you need
+- ConS2S
 - Capsule
 - Quantum-inspired NN
-
-
 
 ## Libary
 
