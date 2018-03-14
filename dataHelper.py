@@ -167,10 +167,20 @@ def getDataSet(opt):
     
 #    files=[os.path.join(data_dir,data_name)   for data_name in ['train.txt','test.txt','dev.txt']]
     
-    
-    
+import re
+def clean(text):
+#    text="'tycoon.<br'"
+    for token in ["<br/>","<br>","<br"]:
+         text = re.sub(token," ",text)
+    text = re.sub("[\s+\.\!\/_,$%^*()\(\)<>+\"\[\]\-\?;:\'{}`]+|[+——！，。？、~@#￥%……&*（）]+", " ",text)
 
-def loadData(opt,embedding=True):
+#    print("%s $$$$$ %s" %(pre,text))     
+
+    return text.lower().split()
+
+   
+
+def loadData(opt,embedding=True,debug=False):
     if embedding==False:
         return loadDataWithoutEmbedding(opt)
     
@@ -180,22 +190,29 @@ def loadData(opt,embedding=True):
     
     for filename in getDataSet(opt):
         df = pd.read_csv(filename,header = None,sep="\t",names=["text","label"]).fillna('0')
-        df["text"]= df["text"].str.lower().str.split()
-        datas.append(df)        
-    df=pd.concat(datas)   
 
+    #        df["text"]= df["text"].apply(clean).str.lower().str.split() #replace("[\",:#]"," ")
+        df["text"]= df["text"].apply(clean)
+        datas.append(df) 
+    
+    df=pd.concat(datas)   
+    df.to_csv("demo.text",sep="\t",index=False)
     label_set = set(df["label"])
     label_alphabet.addAll(label_set)
     
     word_set=set()
-    [word_set.add(word)  for l in df["text"] for word in l]
+    [word_set.add(word)  for l in df["text"] if l is not None for word in l ]
 #    from functools import reduce
-#    word_set=set(reduce(lambda x,y :x+y,df["text"]))
-    
+#    word_set=set(reduce(lambda x,y :x+y,df["text"]))            
+            
     glove_file = getEmbeddingFile(opt.__dict__.get("embedding","glove_6b_300"))
     loaded_vectors,embedding_size = load_text_vec(word_set,glove_file)
-    word_set = word_set & set(loaded_vectors.keys())
-    alphabet.addAll(word_set)  
+    word_set_intersection = word_set & set(loaded_vectors.keys())
+    if debug:
+        with open("unknown.txt","w",encoding="utf-8") as f:
+            unknown_set = word_set - set(loaded_vectors.keys())
+            f.write("\n".join( unknown_set))
+    alphabet.addAll(word_set_intersection)  
     vectors = getSubVectors(loaded_vectors,alphabet,embedding_size)
     
     if opt.max_seq_len==-1:
