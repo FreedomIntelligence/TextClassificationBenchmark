@@ -17,7 +17,7 @@ def parse_opt():
     parser.add_argument('--grad_clip', type=float, default=1e-1,
                     help='grad_clip')
 
-    parser.add_argument('--model', type=str, default="selfattention",
+    parser.add_argument('--model', type=str, default="lstm_attention",
                     help='model name')
     parser.add_argument('--dataset', type=str, default="imdb",
                     help='dataset')
@@ -60,6 +60,8 @@ def parse_opt():
     
     if args.model=="transformer":
         args.position=True
+    else:
+        args.position=False
 
         
     return args 

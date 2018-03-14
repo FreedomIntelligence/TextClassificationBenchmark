@@ -29,7 +29,6 @@ from_torchtext = False
 opt = opts.parse_opt()
 #opt.proxy="http://xxxx.xxxx.com:8080"
 
-print(opt.lstm_mean)
 
 if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
     os.environ["CUDA_VISIBLE_DEVICES"] =opt.gpu
@@ -50,7 +49,7 @@ model.train()
 print("# parameters:", sum(param.numel() for param in model.parameters()))
 optimizer = optim.Adam(model.parameters(), lr=opt.learning_rate)
 optimizer.zero_grad()
-loss_fun = BCELoss()
+loss_fun = F.cross_entropy()
 
 #batch = next(iter(train_iter))
 
@@ -66,7 +65,7 @@ for i in range(opt.max_epoch):
         text = batch.text[0] if from_torchtext else batch.text
         predicted = model(text)
 
-        loss= F.cross_entropy(predicted,batch.label)
+        loss= loss_fun(predicted,batch.label)
 
         loss.backward()
         utils.clip_gradient(optimizer, opt.grad_clip)

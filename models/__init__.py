@@ -22,6 +22,7 @@ from .RNN_CNN import RNN_CNN
 from .LSTMBI import LSTMBI
 from .Transformer import AttentionIsAllYouNeed
 from .SelfAttention import SelfAttention
+from .LSTMwithAttention import LSTMAttention
 def setup(opt):
     
     if opt.model == 'lstm':
@@ -52,6 +53,8 @@ def setup(opt):
         model = AttentionIsAllYouNeed(opt)
     elif opt.model == "selfattention":
         model = SelfAttention(opt)
+    elif opt.model == "lstm_attention":
+        model =LSTMAttention(opt)
     else:
         raise Exception("model not supported: {}".format(opt.model))
     return model

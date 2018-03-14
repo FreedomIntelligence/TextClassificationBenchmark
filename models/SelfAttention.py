@@ -54,7 +54,7 @@ class SelfAttention(nn.Module):
         lstm_out, self.hidden = self.bilstm(x, self.hidden)  #lstm_out:200x64x128
         final =lstm_out.permute(1,0,2)#torch.mean(,1) 
         attn_ene = self.self_attention(final)
-        attns =F.softmax(attn_ene.view(self.batch_size, -1), dim=1).unsqueeze(2)
+        attns =F.softmax(attn_ene.view(self.batch_size, -1))
         feats = (final * attns).sum(dim=1)
         y  = self.hidden2label(feats) #64x3
         
