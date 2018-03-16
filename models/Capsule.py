@@ -86,7 +86,7 @@ class CapsuleNet(nn.Module):
         self.kernel_size = 3
         self.kernel_size_primary=3
         if opt.__dict__.get("embeddings",None) is not None:
-            self.embed.weight=nn.Parameter(opt.embeddings)
+            self.embed.weight=nn.Parameter(opt.embeddings,requires_grad=opt.embedding_training)
 
         self.primary_capsules = CapsuleLayer(num_capsules=8, num_route_nodes=-1, in_channels=256, out_channels=32)
         self.digit_capsules = CapsuleLayer(num_capsules=opt.label_size, num_route_nodes=int(32 * opt.max_seq_len/2), in_channels=8,

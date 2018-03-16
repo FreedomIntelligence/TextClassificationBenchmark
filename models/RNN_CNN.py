@@ -14,7 +14,7 @@ class RNN_CNN(nn.Module):
         self.use_gpu = torch.cuda.is_available()
 
         self.word_embeddings = nn.Embedding(opt.vocab_size, opt.embedding_dim)
-        self.word_embeddings.weight = nn.Parameter(opt.embeddings)
+        self.word_embeddings.weight = nn.Parameter(opt.embeddings,requires_grad=opt.embedding_training)
 #        self.word_embeddings.weight.data.copy_(torch.from_numpy(opt.embeddings))
         self.lstm = nn.LSTM(opt.embedding_dim, opt.hidden_dim)
         ###self.hidden2label = nn.Linear(opt.hidden_dim, opt.label_size)

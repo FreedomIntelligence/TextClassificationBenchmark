@@ -30,6 +30,8 @@ def parse_opt():
                     help='max_epoch')
     parser.add_argument('--embedding_file', type=str, default="glove.6b.300",
                     help='glove or w2v')
+    parser.add_argument('--embedding_training', type=str, default="false",
+                    help='embedding_training')
     #kim CNN
     parser.add_argument('--kernel_sizes', type=str, default="1,2,3,5",
                     help='kernel_sizes')
@@ -47,6 +49,9 @@ def parse_opt():
                     help='http://proxy.xx.com:8080')
     parser.add_argument('--debug', type=str, default="false",
                     help='gpu number')
+    
+    
+    
     
     
     
@@ -70,6 +75,11 @@ def parse_opt():
         args.debug = True
     else:
         args.debug = False
+    
+    if args.embedding_training.lower() =="true":
+        args.embedding_training = True
+    else:
+        args.embedding_training = False
     if os.path.exists("proxy.config"):
         with open("proxy.config") as f:
 

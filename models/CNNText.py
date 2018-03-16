@@ -14,7 +14,7 @@ class CNNText(nn.Module):
         
         self.encoder = nn.Embedding(opt.vocab_size,opt.embedding_dim)
         if opt.__dict__.get("embeddings",None) is not None:
-            self.encoder.weight=nn.Parameter(opt.embeddings)
+            self.encoder.weight=nn.Parameter(opt.embeddings,requires_grad=opt.embedding_training)
 
 
         self.content_conv = nn.Sequential(
