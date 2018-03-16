@@ -8,7 +8,7 @@ from .glove import Glove
 def getDataset(opt):
     if opt.dataset=="imdb":
         dataset = IMDBDataset(opt)
-    if opt.dataset=="mr":
+    elif opt.dataset=="mr":
         dataset = MRDataset(opt)
         
     else:
