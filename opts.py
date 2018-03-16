@@ -19,7 +19,7 @@ def parse_opt():
 
     parser.add_argument('--model', type=str, default="bilstm",
                     help='model name')
-    parser.add_argument('--dataset', type=str, default="imdb",
+    parser.add_argument('--dataset', type=str, default="mr",
                     help='dataset')
     parser.add_argument('--position', type=bool, default=False,
                     help='gpu number')
@@ -70,6 +70,12 @@ def parse_opt():
         args.debug = True
     else:
         args.debug = False
+    if os.path.exists("proxy.config"):
+        with open("proxy.config") as f:
+
+            args.proxy = f.read()
+            print(args.proxy)
+        
 
         
     return args 

@@ -2,11 +2,14 @@
 
 
 from .imdb import IMDBDataset
+from .mr import MRDataset
 from .glove import Glove
 
 def getDataset(opt):
     if opt.dataset=="imdb":
         dataset = IMDBDataset(opt)
+    if opt.dataset=="mr":
+        dataset = MRDataset(opt)
         
     else:
         raise Exception("dataset not supported: {}".format(opt.dataset))
