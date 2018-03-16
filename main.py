@@ -47,8 +47,8 @@ model=models.setup(opt)
 if torch.cuda.is_available():
     model.cuda()
 model.train()
-print("# parameters:", sum(param.numel() for param in model.parameters()))
-optimizer = optim.Adam(model.parameters(), lr=opt.learning_rate)
+print("# parameters:", sum(param.numel() for param in model.parameters() if param.requires_grad))
+optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=opt.learning_rate)
 optimizer.zero_grad()
 loss_fun = F.cross_entropy
 
