@@ -19,7 +19,7 @@ def parse_opt():
 
     parser.add_argument('--model', type=str, default="bilstm",
                     help='model name')
-    parser.add_argument('--dataset', type=str, default="mr",
+    parser.add_argument('--dataset', type=str, default="subj",
                     help='dataset')
     parser.add_argument('--position', type=bool, default=False,
                     help='gpu number')
@@ -47,7 +47,7 @@ def parse_opt():
                     help='gpu number')
     parser.add_argument('--proxy', type=str, default="null",
                     help='http://proxy.xx.com:8080')
-    parser.add_argument('--debug', type=str, default="false",
+    parser.add_argument('--debug', type=str, default="true",
                     help='gpu number')
     
     
