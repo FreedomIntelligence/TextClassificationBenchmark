@@ -53,7 +53,11 @@ class Dataset(object):
             urllib.request.install_opener(opener)
             print("proxy in %s" % self.http_proxy)
 #        urllib.request.urlretrieve(url,path,lambda a,b,c : print("%.1f"%(100.0 * a * b / c), end='\r',flush=True) if (int(a * b / c)*1000)%100==0 else None )a
-        urllib.request.urlretrieve(url,path )
+        try:
+            urllib.request.urlretrieve(url,path )
+        except ImportError:
+            import urllib2
+            urllib2.urlretrieve(url,path)
         return path
     
     def download(self,check=None):
