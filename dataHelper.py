@@ -141,21 +141,28 @@ def load_text_vec(alphabet,filename="",embedding_size=-1):
         embedding_size = len(vectors[list(vectors.keys())[0]])
     return vectors,embedding_size
 
-def getEmbeddingFile(name):
+def getEmbeddingFile(opt):
     #"glove"  "w2v"
+    embedding_name = opt.__dict__.get("embedding","glove_6b_300")
+    if embedding_name.startswith("glove"):
+        return os.path.join( ".vector_cache","glove.6B.300d.txt")
+    else:
+        return opt.embedding_dir
     
-    return os.path.join( ".vector_cache","glove.6B.300d.txt")
+    return 
 @log_time_delta
 def getSubVectors(opt,alphabet):
     pickle_filename = "temp/"+opt.dataset+".vec"
     if not os.path.exists(pickle_filename) or opt.debug:    
-        glove_file = getEmbeddingFile(opt.__dict__.get("embedding","glove_6b_300"))
+        glove_file = getEmbeddingFile(opt)
         wordset= set(alphabet.keys())   # python 2.7
         loaded_vectors,embedding_size = load_text_vec(wordset,glove_file) 
         
         vectors = vectors_lookup(loaded_vectors,alphabet,embedding_size)
         if opt.debug:
-            with open("unknown.txt","w") as f:
+            if not os.path.exists("temp"):
+                os.mkdir("temp")
+            with open("temp/oov.txt","w","utf-8") as f:
                 unknown_set = set(alphabet.keys()) - set(loaded_vectors.keys())
                 f.write("\n".join( unknown_set))
         if  opt.debug:
@@ -207,6 +214,8 @@ def get_clean_datas(opt):
             df["text"]= df["text"].apply(clean)
             datas.append(df)
         if  opt.debug:
+            if not os.path.exists("temp"):
+                os.mkdir("temp")
             pickle.dump(datas,open(pickle_filename,"wb"))
         return datas
     else:

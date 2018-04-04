@@ -1,10 +1,15 @@
 import argparse,os
+import configparser
 def parse_opt():
     parser = argparse.ArgumentParser()
     # Data input settings
-    parser.add_argument('--hidden_dim', type=int, default=128,
-                    help='hidden_dim')   
     
+    parser.add_argument('--config', type=str, default="no_file_exists",
+                    help='gpu number')
+        
+        
+    parser.add_argument('--hidden_dim', type=int, default=128,
+                    help='hidden_dim')     
 
     parser.add_argument('--max_seq_len', type=int, default=200,
                     help='max_seq_len')
@@ -19,7 +24,7 @@ def parse_opt():
 
     parser.add_argument('--model', type=str, default="bilstm",
                     help='model name')
-    parser.add_argument('--dataset', type=str, default="subj",
+    parser.add_argument('--dataset', type=str, default="ag",
                     help='dataset')
     parser.add_argument('--position', type=bool, default=False,
                     help='gpu number')
@@ -49,14 +54,19 @@ def parse_opt():
                     help='http://proxy.xx.com:8080')
     parser.add_argument('--debug', type=str, default="true",
                     help='gpu number')
-    
-    
-    
-    
-    
-    
+
+    parser.add_argument('--embedding_dir', type=str, default=".glove/glove.6B.300d.txt",
+                    help='embedding_dir')
 #
     args = parser.parse_args()
+    
+    if args.config != "no_file_exists":
+        config = configparser.ConfigParser()
+        config_file_path=args.config
+        config.read(config_file_path)
+        config_common = config['COMMON']
+        for key in config_common.keys():
+            args.__dict__[key]=config_common[key]
 
     args.kernel_sizes = [int(i) for i in args.kernel_sizes.split(",")]
     args.kernel_nums = [int(i) for i in args.kernel_nums.split(",")]

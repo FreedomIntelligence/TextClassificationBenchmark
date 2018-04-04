@@ -55,9 +55,9 @@ class Dataset(object):
 #        urllib.request.urlretrieve(url,path,lambda a,b,c : print("%.1f"%(100.0 * a * b / c), end='\r',flush=True) if (int(a * b / c)*1000)%100==0 else None )a
         try:
             urllib.request.urlretrieve(url,path )
-        except ImportError:
+        except:
             import urllib2
-            urllib2.urlretrieve(url,path)
+            urllib2.urlretrieve(url,path )
         return path
     
     def download(self,check=None):
@@ -93,7 +93,7 @@ class Dataset(object):
                     with zipfile.ZipFile(zpath, 'r') as zfile:
                         print('extracting')
                         zfile.extractall(path)
-                elif ext in ['.gz', '.tgz']:
+                elif ext in ['.gz', '.tgz',".bz2"]:
                     with tarfile.open(zpath, 'r:gz') as tar:
                         dirs = [member for member in tar.getmembers()]
                         tar.extractall(path=path, members=dirs)

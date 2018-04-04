@@ -5,6 +5,8 @@ from .imdb import IMDBDataset
 from .mr import MRDataset
 from .glove import Glove
 from .sst import SSTDataset
+from .ag import AGDataset
+
 from .Dataset import Dataset
 def getDataset(opt):
     if opt.dataset=="imdb":
@@ -13,8 +15,11 @@ def getDataset(opt):
         dataset = MRDataset(opt)
     elif opt.dataset=="sst":
         dataset =SSTDataset(opt)
+    elif opt.dataset == "ag":
+        dataset =AGDataset(opt)
     elif opt.dataset in ["cr","mpqa","mr","sst1","sst2","subj","trec"]:
         dataset =Dataset(opt)
+
 
     else:
         raise Exception("dataset not supported: {}".format(opt.dataset))
