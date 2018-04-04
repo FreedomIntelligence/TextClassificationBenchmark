@@ -24,7 +24,9 @@ def parse_opt():
 
     parser.add_argument('--model', type=str, default="bilstm",
                     help='model name')
-    parser.add_argument('--dataset', type=str, default="ag",
+
+    parser.add_argument('--dataset', type=str, default="imdb",
+
                     help='dataset')
     parser.add_argument('--position', type=bool, default=False,
                     help='gpu number')
