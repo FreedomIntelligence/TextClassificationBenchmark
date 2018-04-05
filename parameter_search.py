@@ -27,7 +27,7 @@ train_iter, test_iter = utils.loadData(opt)
 performance_log_file = "result.csv"
 
 def train(opt,train_iter, test_iter,verbose=True):
-    start= time.time()
+    global_start= time.time()
     logger = utils.getLogger()
     model=models.setup(opt)
     if torch.cuda.is_available():
@@ -47,7 +47,7 @@ def train(opt,train_iter, test_iter,verbose=True):
     percisions=[]
     for i in range(opt.max_epoch):
         for epoch,batch in enumerate(train_iter):
-            
+            start= time.time()
             
             text = batch.text[0] if opt.from_torchtext else batch.text
             predicted = model(text)
@@ -74,8 +74,8 @@ def train(opt,train_iter, test_iter,verbose=True):
     dataset = opt.dataset
     df.loc[model_info,dataset] =  max(percisions) 
     df.to_csv(performance_log_file,sep="\t")    
-    logger.info(model_info +" with time :"+ str( time.time()-start)+" ->" +str( max(percisions) ) )
-    print(model_info +" with time :"+ str( time.time()-start)+" ->" +str( max(percisions) ) )
+    logger.info(model_info +" with time :"+ str( time.time()-global_start)+" ->" +str( max(percisions) ) )
+    print(model_info +" with time :"+ str( time.time()-global_start)+" ->" +str( max(percisions) ) )
     
 if __name__=="__main__":
     
