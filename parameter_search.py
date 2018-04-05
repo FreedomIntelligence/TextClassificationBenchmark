@@ -22,9 +22,14 @@ import models
 import utils
 
 
+timeArray = time.localtime(int(time.time()) )
+timeStamp = time.strftime("%Y%m%d%H%M%S", timeArray)
+performance_log_file =timeStamp+ "result.csv"
+
+
 opt = opts.parse_opt()
 train_iter, test_iter = utils.loadData(opt)
-performance_log_file = "result.csv"
+
 
 def train(opt,train_iter, test_iter,verbose=True):
     global_start= time.time()
