@@ -7,7 +7,7 @@ from __future__ import print_function
 import numpy as np
 import pandas as pd
 from six.moves import cPickle
-import time,os
+import time,os,random
 import itertools
 
 import torch
@@ -98,8 +98,11 @@ if __name__=="__main__":
             "optimizer":["adam"],
             "lr_scheduler":[None]            
                         }    
-    args=[arg for i,arg in enumerate( itertools.product(*parameter_pools.values())) if i%8==opt.gpu]
-
+    
+    pool =[ arg for arg in itertools.product(*parameter_pools.values())]
+    pool=random.shuffle(pool)
+    args=[arg for i,arg in enumerate(pool) if i%8==opt.gpu]
+    
     for arg in args:
         for k,v in zip(parameter_pools.keys(),arg):
             opt.__setattr__(k,v)

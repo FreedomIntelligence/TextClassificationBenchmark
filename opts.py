@@ -82,7 +82,7 @@ def parse_opt():
 #    assert args.rnn_size > 0, "rnn_size should be greater than 0"
 
     if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
-        os.environ["CUDA_VISIBLE_DEVICES"] =args.gpu
+        os.environ["CUDA_VISIBLE_DEVICES"] =str(args.gpu)
     
     if args.model=="transformer":
         args.position=True
