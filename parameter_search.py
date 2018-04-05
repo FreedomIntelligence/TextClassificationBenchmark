@@ -79,7 +79,10 @@ def train(opt,train_iter, test_iter,verbose=True):
     
 if __name__=="__main__":
     
-    
+    if not os.path.exists(performance_log_file):
+        with open(performance_log_file,"w") as f:
+            f.write("argument\n")
+            f.close()
     print("gpu : %d" % opt.gpu)   
 
     
@@ -88,7 +91,7 @@ if __name__=="__main__":
             "keep_dropout":[0.1,0.5,0.8,0.9,1.0],
             "batch_size":[32,64,128],
             "learning_rate":[1e-1,1e-2,1e-3,1e-4],
-            "optimizer":["adam"],
+            "optimizer":["Adam"],
             "lr_scheduler":[None]            
                         }    
     args=[arg for i,arg in enumerate( itertools.product(*parameter_pools.values())) if i%8==opt.gpu]
