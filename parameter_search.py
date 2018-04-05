@@ -72,7 +72,8 @@ def train(opt,train_iter, test_iter,verbose=True):
 #    while(utils.is_writeable(performance_log_file)):
     df = pd.read_csv(performance_log_file,index_col=0,sep="\t")
     dataset = opt.dataset
-    df.loc[model_info,dataset] =  max(percisions) 
+    if max(percisions)>float(df.loc[model_info,dataset]):
+        df.loc[model_info,dataset] =  max(percisions) 
     df.to_csv(performance_log_file,sep="\t")    
     logger.info(model_info +" with time :"+ str( time.time()-global_start)+" ->" +str( max(percisions) ) )
     print(model_info +" with time :"+ str( time.time()-global_start)+" ->" +str( max(percisions) ) )
