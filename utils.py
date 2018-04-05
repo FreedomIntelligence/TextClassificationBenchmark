@@ -134,7 +134,7 @@ def getLogger():
     import random
     random_str = str(random.randint(1,10000))
     timeStamp = time.strftime("%Y%m%d%H%M%S", timeArray)
-    log_filename = "log/" +time.strftime("%Y%m%d", timeArray)+"_"+ random_str
+    log_filename = "log/" +time.strftime("%Y%m%d", timeArray)
     
     program = os.path.basename(sys.argv[0])
     logger = logging.getLogger(program) 
@@ -142,7 +142,7 @@ def getLogger():
         os.mkdir("log")
     if not os.path.exists(log_filename):
         os.mkdir(log_filename)
-    logging.basicConfig(format='%(asctime)s: %(levelname)s: %(message)s',datefmt='%a, %d %b %Y %H:%M:%S',filename=log_filename+'/qa'+timeStamp+'.log',filemode='w')
+    logging.basicConfig(format='%(asctime)s: %(levelname)s: %(message)s',datefmt='%a, %d %b %Y %H:%M:%S',filename=log_filename+'/qa'+timeStamp+"_"+ random_str+'.log',filemode='w')
     logging.root.setLevel(level=logging.INFO)
     logger.info("running %s" % ' '.join(sys.argv))
     
