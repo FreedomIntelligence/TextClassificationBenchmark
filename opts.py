@@ -65,12 +65,15 @@ def parse_opt():
     args = parser.parse_args()
     
     if args.config != "no_file_exists":
-        config = configparser.ConfigParser()
-        config_file_path=args.config
-        config.read(config_file_path)
-        config_common = config['COMMON']
-        for key in config_common.keys():
-            args.__dict__[key]=config_common[key]
+        if os.path.exists(args.config):
+            config = configparser.ConfigParser()
+            config_file_path=args.config
+            config.read(config_file_path)
+            config_common = config['COMMON']
+            for key in config_common.keys():
+                args.__dict__[key]=config_common[key]
+        else:
+            print("config file named %s does not exist" % args.config)
 
     args.kernel_sizes = [int(i) for i in args.kernel_sizes.split(",")]
     args.kernel_nums = [int(i) for i in args.kernel_nums.split(",")]
