@@ -104,6 +104,8 @@ def getOptimizer(params,name="adam",lr=None,momentum=None,scheduler=None):
         optimizer=torch.optim.Rprop(params, lr=0.01, etas=(0.5, 1.2), step_sizes=(1e-06, 50))
     elif name =="sgd":
         optimizer=torch.optim.SGD(params, lr=0.1, momentum=0, dampening=0, weight_decay=0, nesterov=False)
+    elif name =="adam":
+         optimizer=torch.optim.Adam(params, lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
     else:
         print("undefined optimizer, use adam in default")
         optimizer=torch.optim.Adam(params, lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
