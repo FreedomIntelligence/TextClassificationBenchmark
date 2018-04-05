@@ -89,7 +89,7 @@ if __name__=="__main__":
             "model":["lstm","cnn","kim_cnn","fasttext"],
             "keep_dropout":[0.1,0.5,0.8,0.9,1.0],
             "batch_size":[32,64,128],
-            "learning_rate":[1e-1,1e-2,1e-3,1e-4],
+            "learning_rate":[100,10,1,1e-1,1e-2,1e-3],
             "optimizer":["adam"],
             "lr_scheduler":[None]            
                         }    

@@ -82,33 +82,33 @@ def evaluation(model,test_iter,from_torchtext=True):
 
 
 
-def getOptimizer(params,name="adam",lr=None,momentum=None,scheduler=None):
+def getOptimizer(params,name="adam",lr=1,momentum=None,scheduler=None):
     
     name = name.lower().strip()          
         
     if name=="adadelta":
-        optimizer=torch.optim.Adadelta(params, lr=1.0, rho=0.9, eps=1e-06, weight_decay=0).param_groups()
+        optimizer=torch.optim.Adadelta(params, lr=1.0*lr, rho=0.9, eps=1e-06, weight_decay=0).param_groups()
     elif name == "adagrad":
-        optimizer=torch.optim.Adagrad(params, lr=0.01, lr_decay=0, weight_decay=0)
+        optimizer=torch.optim.Adagrad(params, lr=0.01*lr, lr_decay=0, weight_decay=0)
     elif name == "sparseadam":        
-        optimizer=torch.optim.SparseAdam(params, lr=0.001, betas=(0.9, 0.999), eps=1e-08)
+        optimizer=torch.optim.SparseAdam(params, lr=0.001*lr, betas=(0.9, 0.999), eps=1e-08)
     elif name =="adamax":
-        optimizer=torch.optim.Adamax(params, lr=0.002, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
+        optimizer=torch.optim.Adamax(params, lr=0.002*lr, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
     elif name =="asgd":
-        optimizer=torch.optim.ASGD(params, lr=0.01, lambd=0.0001, alpha=0.75, t0=1000000.0, weight_decay=0)
+        optimizer=torch.optim.ASGD(params, lr=0.01*lr, lambd=0.0001, alpha=0.75, t0=1000000.0, weight_decay=0)
     elif name == "lbfgs":
-        optimizer=torch.optim.LBFGS(params, lr=1, max_iter=20, max_eval=None, tolerance_grad=1e-05, tolerance_change=1e-09, history_size=100, line_search_fn=None)
+        optimizer=torch.optim.LBFGS(params, lr=1*lr, max_iter=20, max_eval=None, tolerance_grad=1e-05, tolerance_change=1e-09, history_size=100, line_search_fn=None)
     elif name == "rmsprop":
-        optimizer=torch.optim.RMSprop(params, lr=0.01, alpha=0.99, eps=1e-08, weight_decay=0, momentum=0, centered=False)
+        optimizer=torch.optim.RMSprop(params, lr=0.01*lr, alpha=0.99, eps=1e-08, weight_decay=0, momentum=0, centered=False)
     elif name =="rprop":
-        optimizer=torch.optim.Rprop(params, lr=0.01, etas=(0.5, 1.2), step_sizes=(1e-06, 50))
+        optimizer=torch.optim.Rprop(params, lr=0.01*lr, etas=(0.5, 1.2), step_sizes=(1e-06, 50))
     elif name =="sgd":
-        optimizer=torch.optim.SGD(params, lr=0.1, momentum=0, dampening=0, weight_decay=0, nesterov=False)
+        optimizer=torch.optim.SGD(params, lr=0.1*lr, momentum=0, dampening=0, weight_decay=0, nesterov=False)
     elif name =="adam":
-         optimizer=torch.optim.Adam(params, lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
+         optimizer=torch.optim.Adam(params, lr=0.1*lr, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
     else:
         print("undefined optimizer, use adam in default")
-        optimizer=torch.optim.Adam(params, lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
+        optimizer=torch.optim.Adam(params, lr=0.1*lr, betas=(0.9, 0.999), eps=1e-08, weight_decay=0)
     
     if scheduler is not None:
         if scheduler == "lambdalr":
