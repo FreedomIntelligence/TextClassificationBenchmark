@@ -50,7 +50,7 @@ def parse_opt():
                     help='lstm_mean')
     parser.add_argument('--lstm_layers', type=int, default=1,# last
                     help='lstm_layers')
-    parser.add_argument('--gpu', type=str, default="0",
+    parser.add_argument('--gpu', type=int, default=0,
                     help='gpu number')
     parser.add_argument('--proxy', type=str, default="null",
                     help='http://proxy.xx.com:8080')
