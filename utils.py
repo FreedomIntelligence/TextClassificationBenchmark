@@ -133,7 +133,9 @@ def getLogger():
     import random
     random_str = str(random.randint(1,10000))
     
-
+    now = int(time.time()) 
+    timeArray = time.localtime(now)
+    timeStamp = time.strftime("%Y%m%d%H%M%S", timeArray)
     log_filename = "log/" +time.strftime("%Y%m%d", timeArray)
     
     program = os.path.basename(sys.argv[0])
