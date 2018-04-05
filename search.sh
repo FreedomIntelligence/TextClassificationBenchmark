@@ -1,5 +1,5 @@
 echo "use gpu with multiple processes";
-for((i=0;i<=1;i++))
+for((i=0;i<=8;i++))
 do
     {
      echo "use gpu" +$i ; 
