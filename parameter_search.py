@@ -79,12 +79,8 @@ def train(opt,train_iter, test_iter,verbose=True):
     
 if __name__=="__main__":
     
-    import argparse
-    parser = argparse.ArgumentParser(description='running the complex embedding network')
-    parser.add_argument('-gpu_num', action = 'store', dest = 'gpu', help = 'please enter the gpu num.',default =0)
-    args = parser.parse_args()
-    gpu = int(args.gpu)
-    print("gpu : %d" % gpu)   
+    
+    print("gpu : %d" % opt.gpu)   
 
     
     parameter_pools={
@@ -95,7 +91,7 @@ if __name__=="__main__":
             "optimizer":["Adam"],
             "lr_scheduler":[None]            
                         }    
-    args=[arg for i,arg in enumerate( itertools.product(*parameter_pools.values())) if i%8==gpu]
+    args=[arg for i,arg in enumerate( itertools.product(*parameter_pools.values())) if i%8==opt.gpu]
 
     for arg in args:
         for k,v in zip(parameter_pools.keys(),arg):
