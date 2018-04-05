@@ -59,6 +59,8 @@ def parse_opt():
 
     parser.add_argument('--embedding_dir', type=str, default=".glove/glove.6B.300d.txt",
                     help='embedding_dir')
+    parser.add_argument('--from_torchtext', type=str, default="false",
+                    help='from torchtext or native data loader')
 #
     args = parser.parse_args()
     
@@ -92,6 +94,12 @@ def parse_opt():
         args.embedding_training = True
     else:
         args.embedding_training = False
+    if args.from_torchtext.lower() =="true":
+        args.from_torchtext = True
+    else:
+        args.from_torchtext = False
+        
+        
     if os.path.exists("proxy.config"):
         with open("proxy.config") as f:
 

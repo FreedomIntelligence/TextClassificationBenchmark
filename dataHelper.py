@@ -148,7 +148,7 @@ def getEmbeddingFile(opt):
         return os.path.join( ".vector_cache","glove.6B.300d.txt")
     else:
         return opt.embedding_dir
-    
+    # please refer to   https://pypi.python.org/pypi/torchwordemb/0.0.7
     return 
 @log_time_delta
 def getSubVectors(opt,alphabet):
