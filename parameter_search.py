@@ -27,7 +27,7 @@ train_iter, test_iter = utils.loadData(opt)
 performance_log_file = "result.csv"
 
 def train(opt,train_iter, test_iter,verbose=True):
-    
+    start= time.time()
     logger = utils.getLogger()
     model=models.setup(opt)
     if torch.cuda.is_available():
@@ -40,14 +40,14 @@ def train(opt,train_iter, test_iter,verbose=True):
     
     
     model.train()
-    optimizer = utils.getOptimizer(params,optimizer=opt.optimizer, lr=opt.learning_rate,scheduler=opt.lr_scheduler)
+    optimizer = utils.getOptimizer(params,name=opt.optimizer, lr=opt.learning_rate,scheduler=opt.lr_scheduler)
     optimizer.zero_grad()
     loss_fun = F.cross_entropy
 
     percisions=[]
     for i in range(opt.max_epoch):
         for epoch,batch in enumerate(train_iter):
-            start= time.time()
+            
             
             text = batch.text[0] if opt.from_torchtext else batch.text
             predicted = model(text)
@@ -95,9 +95,7 @@ if __name__=="__main__":
             "optimizer":["Adam"],
             "lr_scheduler":[None]            
                         }    
-
-    opt.max_epoch=0
-    args=[arg for i,arg in enumerate( itertools.product(*parameter_pools.values())) if i%8==gpu][2]
+    args=[arg for i,arg in enumerate( itertools.product(*parameter_pools.values())) if i%8==gpu]
 
     for arg in args:
         for k,v in zip(parameter_pools.keys(),arg):
