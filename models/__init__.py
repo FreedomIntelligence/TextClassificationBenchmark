@@ -23,6 +23,7 @@ from .LSTMBI import LSTMBI
 from .Transformer import AttentionIsAllYouNeed
 from .SelfAttention import SelfAttention
 from .LSTMwithAttention import LSTMAttention
+from .BERTFast import BERTFast
 def setup(opt):
     
     if opt.model == 'lstm':
@@ -55,6 +56,8 @@ def setup(opt):
         model = SelfAttention(opt)
     elif opt.model == "lstm_attention":
         model =LSTMAttention(opt)
+    elif opt.model == "bert":
+        model =BERTFast(opt)
     else:
         raise Exception("model not supported: {}".format(opt.model))
     return model

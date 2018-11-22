@@ -13,7 +13,7 @@ def parse_opt():
 
     parser.add_argument('--max_seq_len', type=int, default=200,
                     help='max_seq_len')
-    parser.add_argument('--batch_size', type=int, default=64,
+    parser.add_argument('--batch_size', type=int, default=1,
                     help='batch_size')
     parser.add_argument('--embedding_dim', type=int, default=100,
                     help='embedding_dim')
@@ -22,7 +22,7 @@ def parse_opt():
     parser.add_argument('--grad_clip', type=float, default=1e-1,
                     help='grad_clip')
 
-    parser.add_argument('--model', type=str, default="bilstm",
+    parser.add_argument('--model', type=str, default="bert",
                     help='model name')
 
     parser.add_argument('--dataset', type=str, default="imdb",
@@ -59,6 +59,10 @@ def parse_opt():
 
     parser.add_argument('--embedding_dir', type=str, default=".glove/glove.6B.300d.txt",
                     help='embedding_dir')
+    
+    parser.add_argument('--bert_dir', type=str, default="D:/dataset/bert/uncased_L-12_H-768_A-12",
+                    help='bert dir')
+    
     parser.add_argument('--from_torchtext', type=str, default="false",
                     help='from torchtext or native data loader')
 #

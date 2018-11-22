@@ -73,7 +73,7 @@ for i in range(opt.max_epoch):
         optimizer.step()
         if epoch% 100==0:
             if  torch.cuda.is_available():
-                print("%d iteration %d epoch with loss : %.5f in %.4f seconds" % (i,epoch,loss.cpu().data.numpy()[0],time.time()-start))
+                print("%d iteration %d epoch with loss : %.5f in %.4f seconds" % (i,epoch,loss.cpu().item(),time.time()-start))
             else:
                 print("%d iteration %d epoch with loss : %.5f in %.4f seconds" % (i,epoch,loss.data.numpy()[0],time.time()-start))
  

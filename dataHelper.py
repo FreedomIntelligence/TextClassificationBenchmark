@@ -73,7 +73,8 @@ class BucketIterator(object):
         self.batch_size=opt.batch_size
         self.shuffle=opt.__dict__.get("shuffle",self.shuffle)
         self.position=opt.__dict__.get("position",False)
-        self.padding_token =  opt.alphabet.padding_token
+        if self.position:
+            self.padding_token =  opt.alphabet.padding_token
     
     def transform(self,data):
         if torch.cuda.is_available():
@@ -222,6 +223,22 @@ def get_clean_datas(opt):
         print("load cache for data")
         return pickle.load(open(pickle_filename,"rb"))
     
+    
+    
+
+
+def load_vocab( bert_vocab_dir="d:/dataset/bert/uncased_L-12_H-768_A-12/vocab.txt" ):
+    alphabet = Alphabet(start_feature_id = 0,alphabet_type="bert")
+
+    from pytorch_pretrained_bert import BertTokenizer
+
+    # Load pre-trained model tokenizer (vocabulary)
+    tokenizer = BertTokenizer.from_pretrained(bert_vocab_dir)
+    for index,word in tokenizer.ids_to_tokens.items():
+        alphabet.add(word)
+    return alphabet
+        
+    
 
 def loadData(opt,embedding=True):
     if embedding==False:
@@ -231,29 +248,37 @@ def loadData(opt,embedding=True):
     
     alphabet = Alphabet(start_feature_id = 0)
     label_alphabet= Alphabet(start_feature_id = 0,alphabet_type="label") 
-
     
     df=pd.concat(datas)   
     df.to_csv("demo.text",sep="\t",index=False)
     label_set = set(df["label"])
     label_alphabet.addAll(label_set)
-    
-    word_set=set()
-    [word_set.add(word)  for l in df["text"] if l is not None for word in l ]
-#    from functools import reduce
-#    word_set=set(reduce(lambda x,y :x+y,df["text"]))            
-   
-    alphabet.addAll(word_set)
-
-    vectors = getSubVectors(opt,alphabet)  
-    
+    opt.label_size= len(label_alphabet)
     if opt.max_seq_len==-1:
         opt.max_seq_len = df.apply(lambda row: row["text"].__len__(),axis=1).max()
-    opt.vocab_size= len(alphabet)    
-    opt.label_size= len(label_alphabet)
-    opt.embedding_dim= vectors.shape[-1]
-    opt.embeddings = torch.FloatTensor(vectors)
-    opt.alphabet=alphabet
+        
+    if "bert" not in opt.model.lower(): 
+
+        
+        word_set=set()
+        [word_set.add(word)  for l in df["text"] if l is not None for word in l ]
+    #    from functools import reduce
+    #    word_set=set(reduce(lambda x,y :x+y,df["text"]))            
+       
+        alphabet.addAll(word_set)
+    
+        vectors = getSubVectors(opt,alphabet) 
+        
+        opt.vocab_size= len(alphabet)    
+    #    opt.label_size= len(label_alphabet)
+        opt.embedding_dim= vectors.shape[-1]
+        opt.embeddings = torch.FloatTensor(vectors)
+        opt.alphabet=alphabet
+    else:   
+        opt.alphabet = load_vocab()
+    
+    
+    
 #    alphabet.dump(opt.dataset+".alphabet")     
     for data in datas:
         data["text"]= data["text"].apply(lambda text: [alphabet.get(word,alphabet.unknow_token)  for word in text[:opt.max_seq_len]] + [alphabet.padding_token] *int(opt.max_seq_len-len(text)) )

@@ -74,7 +74,7 @@ def evaluation(model,test_iter,from_torchtext=True):
         percision=(idx== batch.label).float().mean()
         
         if torch.cuda.is_available():
-            accuracy.append(percision.data.cpu().numpy()[0] )
+            accuracy.append(percision.data.item() )
         else:
             accuracy.append(percision.data.numpy()[0] )
     model.train()
