@@ -227,7 +227,10 @@ def get_clean_datas(opt):
     
 
 
-def load_vocab( bert_vocab_dir="d:/dataset/bert/uncased_L-12_H-768_A-12/vocab.txt" ):
+def load_vocab_from_bert(bert_base):
+    
+    
+    bert_vocab_dir = os.path.join(bert_base,"vocab.txt")
     alphabet = Alphabet(start_feature_id = 0,alphabet_type="bert")
 
     from pytorch_pretrained_bert import BertTokenizer
@@ -275,7 +278,7 @@ def loadData(opt,embedding=True):
         opt.embeddings = torch.FloatTensor(vectors)
         opt.alphabet=alphabet
     else:   
-        opt.alphabet = load_vocab()
+        opt.alphabet = load_vocab_from_bert(opt.bert_dir)
     
     
     
