@@ -239,7 +239,7 @@ def load_vocab_from_bert(bert_base):
     tokenizer = BertTokenizer.from_pretrained(bert_vocab_dir)
     for index,word in tokenizer.ids_to_tokens.items():
         alphabet.add(word)
-    return alphabet
+    return alphabet,tokenizer
         
     
 
@@ -276,15 +276,18 @@ def loadData(opt,embedding=True):
     #    opt.label_size= len(label_alphabet)
         opt.embedding_dim= vectors.shape[-1]
         opt.embeddings = torch.FloatTensor(vectors)
-        opt.alphabet=alphabet
+        
     else:   
-        opt.alphabet = load_vocab_from_bert(opt.bert_dir)
+        alphabet,tokenizer = load_vocab_from_bert(opt.bert_dir)
     
-    
+    opt.alphabet=alphabet
     
 #    alphabet.dump(opt.dataset+".alphabet")     
     for data in datas:
-        data["text"]= data["text"].apply(lambda text: [alphabet.get(word,alphabet.unknow_token)  for word in text[:opt.max_seq_len]] + [alphabet.padding_token] *int(opt.max_seq_len-len(text)) )
+        if "bert" not in opt.model.lower():
+            data["text"]= data["text"].apply(lambda text: [alphabet.get(word,alphabet.unknow_token)  for word in text[:opt.max_seq_len]] + [alphabet.padding_token] *int(opt.max_seq_len-len(text)) )
+        else :
+            data["text"]= data["text"].apply(lambda text: [tokenizer.convert_tokens_to_ids( tokenizer.tokenize(" ".join(text[:opt.max_seq_len])))] + [0] *int(opt.max_seq_len-len(text)) )
         data["label"]=data["label"].apply(lambda text: label_alphabet.get(text)) 
         
     return map(lambda x:BucketIterator(x,opt),datas)#map(BucketIterator,datas)  #
