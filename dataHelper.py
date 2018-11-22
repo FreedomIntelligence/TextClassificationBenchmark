@@ -287,7 +287,7 @@ def loadData(opt,embedding=True):
         if "bert" not in opt.model.lower():
             data["text"]= data["text"].apply(lambda text: [alphabet.get(word,alphabet.unknow_token)  for word in text[:opt.max_seq_len]] + [alphabet.padding_token] *int(opt.max_seq_len-len(text)) )
         else :
-            data["text"]= data["text"].apply(lambda text: [tokenizer.convert_tokens_to_ids( tokenizer.tokenize(" ".join(text[:opt.max_seq_len])))] + [0] *int(opt.max_seq_len-len(text)) )
+            data["text"]= data["text"].apply(lambda text: tokenizer.convert_tokens_to_ids( tokenizer.tokenize(" ".join(text[:opt.max_seq_len]))) + [0] *int(opt.max_seq_len-len(text)) )
         data["label"]=data["label"].apply(lambda text: label_alphabet.get(text)) 
         
     return map(lambda x:BucketIterator(x,opt),datas)#map(BucketIterator,datas)  #
