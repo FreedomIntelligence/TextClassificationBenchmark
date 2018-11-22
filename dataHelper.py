@@ -245,7 +245,7 @@ def load_vocab_from_bert(bert_base):
 def process_with_bert(text,tokenizer,max_seq_len) :
     tokens =tokenizer.convert_tokens_to_ids(  tokenizer.tokenize(" ".join(text[:max_seq_len])))
     
-    return tokens + [0] *int(max_seq_len-len(tokens))
+    return tokens[:max_seq_len] + [0] *int(max_seq_len-len(tokens))
 
 def loadData(opt,embedding=True):
     if embedding==False:
