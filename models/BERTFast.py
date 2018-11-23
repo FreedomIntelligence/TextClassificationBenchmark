@@ -13,12 +13,21 @@ class BERTFast(nn.Module):
         self.fc = nn.Linear(768, opt.label_size)
 
         self.bert_model = BertModel.from_pretrained('bert-base-uncased')
+        self.content_fc = nn.Sequential(
+            nn.Linear(768,100),
+            nn.BatchNorm1d(100),
+            nn.ReLU(inplace=True),
+            # nn.Linear(opt.linear_hidden_size,opt.linear_hidden_size),
+            # nn.BatchNorm1d(opt.linear_hidden_size),
+            # nn.ReLU(inplace=True),
+            nn.Linear(100,opt.label_size)
+        )
 
 
     def forward(self,  content):
         encoded, _ = self.bert_model(content)
         encoded_doc = t.mean(encoded[-1],dim=1)
-        logits = self.fc(encoded_doc)
+        logits = self.content_fc(encoded_doc)
         return logits
 
 import argparse
