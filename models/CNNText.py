@@ -2,12 +2,12 @@
 import torch as t
 import numpy as np
 from torch import nn
-
-class CNNText(nn.Module): 
+from models.BaseModel import BaseModel
+class CNNText(BaseModel): 
     def __init__(self, opt ):
-        super(CNNText, self).__init__()
+        super(CNNText, self).__init__(opt)
         self.model_name = 'CNNText'
-        self.opt=opt
+
         self.content_dim=opt.__dict__.get("content_dim",256)
         self.kernel_size=opt.__dict__.get("kernel_size",3)
 
@@ -27,7 +27,10 @@ class CNNText(nn.Module):
         )
 
         self.fc = nn.Linear(self.content_dim, opt.label_size)
-
+        self.properties.update(
+                {"content_dim":self.content_dim,
+                 "kernel_size":self.kernel_size,
+                })
 
     def forward(self,  content):
 

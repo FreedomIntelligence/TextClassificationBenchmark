@@ -41,12 +41,13 @@ class Inception(nn.Module):
         branch4=self.branch4(x)
         result=self.activa(torch.cat((branch1,branch2,branch3,branch4),1))
         return result
-class InceptionCNN(nn.Module):
+    
+from models.BaseModel import BaseModel
+class InceptionCNN(BaseModel):
     def __init__(self, opt ):
-        super(InceptionCNN, self).__init__()   
+        super(InceptionCNN, self).__init__(opt)   
         incept_dim=getattr(opt,"inception_dim",512)
         self.model_name = 'CNNText_inception'
-        self.opt=opt
         self.encoder = nn.Embedding(opt.vocab_size,opt.embedding_dim)
 
         self.content_conv=nn.Sequential(
@@ -55,14 +56,19 @@ class InceptionCNN(nn.Module):
             Inception(incept_dim,incept_dim),
             nn.MaxPool1d(opt.max_seq_len)
         )
+        linear_hidden_size = getattr(opt,"linear_hidden_size",2000)
         self.fc = nn.Sequential(
-            nn.Linear(incept_dim,getattr(opt,"linear_hidden_size",2000)),
-            nn.BatchNorm1d(getattr(opt,"linear_hidden_size",2000)),
+            nn.Linear(incept_dim,linear_hidden_size),
+            nn.BatchNorm1d(linear_hidden_size),
             nn.ReLU(inplace=True),
-            nn.Linear(getattr(opt,"linear_hidden_size",2000) ,opt.label_size)
+            nn.Linear(linear_hidden_size ,opt.label_size)
         )
         if opt.__dict__.get("embeddings",None) is not None:
             self.encoder.weight=nn.Parameter(opt.embeddings)
+        self.properties.update(
+                {"linear_hidden_size":linear_hidden_size,
+                 "incept_dim":incept_dim,
+                })
  
     def forward(self,content):
      

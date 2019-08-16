@@ -10,25 +10,25 @@ import numpy as np
 
 
 
-from .LSTM import LSTMClassifier
-from .CNNBasic import BasicCNN1D,BasicCNN2D
-from .CNNKim import KIMCNN1D,KIMCNN2D
-from .CNNMultiLayer import MultiLayerCNN
-from .CNNInception import InceptionCNN
-from .FastText import FastText
-from .Capsule import CapsuleNet
-from .RCNN import RCNN
-from .RNN_CNN import RNN_CNN
-from .LSTMBI import LSTMBI
-from .Transformer import AttentionIsAllYouNeed
-from .SelfAttention import SelfAttention
-from .LSTMwithAttention import LSTMAttention
-from .BERTFast import BERTFast
+from models.LSTM import LSTMClassifier
+from models.CNNBasic import BasicCNN1D,BasicCNN2D
+from models.CNNKim import KIMCNN1D,KIMCNN2D
+from models.CNNMultiLayer import MultiLayerCNN
+from models.CNNInception import InceptionCNN
+from models.FastText import FastText
+from models.Capsule import CapsuleNet
+from models.RCNN import RCNN
+from models.RNN_CNN import RNN_CNN
+from models.LSTMBI import LSTMBI
+from models.Transformer import AttentionIsAllYouNeed
+from models.SelfAttention import SelfAttention
+from models.LSTMwithAttention import LSTMAttention
+from models.BERTFast import BERTFast
 def setup(opt):
     
     if opt.model == 'lstm':
         model = LSTMClassifier(opt)
-    elif opt.model == 'baisc_cnn' or opt.model == "cnn":
+    elif opt.model == 'basic_cnn' or opt.model == "cnn":
         model = BasicCNN1D(opt)
     elif opt.model == 'baisc_cnn_2d' :
         model = BasicCNN2D(opt)

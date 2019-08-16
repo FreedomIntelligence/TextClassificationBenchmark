@@ -5,7 +5,7 @@ import numpy as np
 import torch.nn as nn
 from sklearn.utils import shuffle
 from torch.autograd import Variable
-
+from models.BaseModel import BaseModel
 class LSTMAttention(torch.nn.Module):
     def __init__(self,opt):
         self.opt=opt

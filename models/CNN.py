@@ -2,10 +2,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-
-class CNN(nn.Module):
+from models.BaseModel import BaseModel
+class CNN(BaseModel):
     def __init__(self, opt):
-        super(CNN, self).__init__()
+        super(CNN, self).__init__(opt)
 
         self.embedding_type = opt.embedding_type
         self.batch_size = opt.batch_size
@@ -38,6 +38,11 @@ class CNN(nn.Module):
             setattr(self, 'conv_%d'%i, conv)
 
         self.fc = nn.Linear(sum(self.FILTER_NUM), self.label_size)
+        
+        self.properties.update(
+                {"FILTER_NUM":self.FILTER_NUM,
+                 "FILTERS":self.FILTERS,
+                })
 
     def get_conv(self, i):
         return getattr(self, 'conv_%d'%i)
@@ -61,12 +66,12 @@ class CNN(nn.Module):
 
 
 #https://github.com/zachAlbus/pyTorch-text-classification/blob/master/Yoon/model.py
-class  CNN1(nn.Module):
+from models.BaseModel import BaseModel        
+class  CNN1(BaseModel):
     
     def __init__(self, opt):
-        super(CNN1,self).__init__()
-        self.opt = opt
-        
+        super(CNN1,self).__init__(opt)
+
         V = opt.vocab_size
         D = opt.embedding_dim
         C = opt.label_size
@@ -84,6 +89,10 @@ class  CNN1(nn.Module):
         '''
         self.dropout = nn.Dropout(opt.dropout)
         self.fc1 = nn.Linear(len(Ks)*Co, C)
+        self.properties.update(
+                {"kernel_num":opt.kernel_num,
+                 "kernel_sizes":opt.kernel_sizes,
+                })
 
     def conv_and_pool(self, x, conv):
         x = F.relu(conv(x)).squeeze(3) #(N,Co,W)
@@ -120,9 +129,10 @@ import torch.nn as nn
 
 
 #https://github.com/zachAlbus/pyTorch-text-classification/blob/master/Zhang/model.py
-class CNN2(nn.Module):
+from models.BaseModel import BaseModel 
+class CNN2(BaseModel):
     def __init__(self, opt):
-        super(CNN2, self).__init__()
+        super(CNN2, self).__init__(opt)
         self.embed = nn.Embedding(opt.vocab_size + 1, opt.embedding_dim)
 
         self.conv1 = nn.Sequential(
@@ -159,6 +169,8 @@ class CNN2(nn.Module):
         )
 
         self.fc = nn.Linear(256, opt.label_size)
+        self.properties.update(
+                {})
 
     def forward(self, x_input):
         # Embedding
@@ -175,13 +187,15 @@ class CNN2(nn.Module):
         x = self.fc(x)
 
         return F.log_softmax(x)
-class CNN3(nn.Module):
+    
+from models.BaseModel import BaseModel 
+class CNN3(BaseModel):
     """
     A CNN for text classification.
     Uses an embedding layer, followed by a convolutional, max-pooling and softmax layer.
     """
     def __init__(self, args):
-        super(CNN3, self).__init__()
+        super(CNN3, self).__init__(opt)
         self.args = args
 
         embedding_dim = args.embed_dim
@@ -196,7 +210,9 @@ class CNN3(nn.Module):
 
         self.dropout = nn.Dropout(args.dropout)
         self.fc = nn.Linear(len(kernel_sizes) * out_channel, class_number)
-
+        self.properties.update(
+                {"kernel_sizes":kernel_sizes
+                })
 
     def forward(self, input_x):
         """

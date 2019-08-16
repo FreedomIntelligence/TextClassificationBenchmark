@@ -3,16 +3,18 @@ import torch as t
 import numpy as np
 from torch import nn
 from pytorch_pretrained_bert import BertTokenizer, BertModel, BertForMaskedLM
-
-class BERTFast(nn.Module): 
+from models.BaseModel import BaseModel
+class BERTFast(BaseModel): 
     def __init__(self, opt ):
-        super(BERTFast, self).__init__()
+        super(BERTFast, self).__init__(opt)
         self.model_name = 'bert'
         self.opt=opt
 
         self.fc = nn.Linear(768, opt.label_size)
 
-        self.bert_model = BertModel.from_pretrained('bert-base-uncased')
+        self.bert_model = BertModel.from_pretrained('bert-base-uncased')  
+        for param in self.bert_model.parameters():
+            param.requires_grad=self.opt.bert_trained
         self.content_fc = nn.Sequential(
             nn.Linear(768,100),
             nn.BatchNorm1d(100),
@@ -22,12 +24,16 @@ class BERTFast(nn.Module):
             # nn.ReLU(inplace=True),
             nn.Linear(100,opt.label_size)
         )
+        self.hidden2label = nn.Linear(768, opt.label_size)
+        self.properties.update(
+                {"bert_trained":self.opt.bert_trained
+                })
 
 
     def forward(self,  content):
         encoded, _ = self.bert_model(content)
         encoded_doc = t.mean(encoded[-1],dim=1)
-        logits = self.content_fc(encoded_doc)
+        logits = self.hidden2label(encoded_doc)
         return logits
 
 import argparse

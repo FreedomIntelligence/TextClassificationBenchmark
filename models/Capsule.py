@@ -75,10 +75,11 @@ class CapsuleLayer(nn.Module):
 
         return outputs
 
-
-class CapsuleNet(nn.Module):
+from models.BaseModel import BaseModel
+class CapsuleNet(BaseModel):
     def __init__(self,opt):
-        super(CapsuleNet, self).__init__()
+        super(CapsuleNet, self).__init__(opt)
+        self.model_name = 'capsule'
         self.opt=opt    #300*300
         self.label_size=opt.label_size
         self.embed = nn.Embedding(opt.vocab_size+1, opt.embedding_dim)

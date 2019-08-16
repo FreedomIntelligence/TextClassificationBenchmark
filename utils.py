@@ -9,7 +9,7 @@ from functools import wraps
 import time
 import sys
 import logging
-import os
+import os,configparser,re
 
 def log_time_delta(func):
     @wraps(func)
@@ -125,10 +125,15 @@ def getOptimizer(params,name="adam",lr=1,momentum=None,scheduler=None):
             pass
 
     else:
-        return optimizer
-    
-    
+        return optimizer  
     return 
+
+def get_lr_scheduler(name):
+    # todo 
+    return None
+    
+    
+    
 def getLogger():
     import random
     random_str = str(random.randint(1,10000))
@@ -149,6 +154,29 @@ def getLogger():
     logger.info("running %s" % ' '.join(sys.argv))
     
     return logger
+
+def parse_grid_parameters(file_path):
+    config = configparser.ConfigParser()
+    config.read(file_path)
+    config_common = config['COMMON']
+    dictionary = {}
+    for key,value in config_common.items():
+        array = value.split(';')
+        is_numberic = re.compile(r'^[-+]?[0-9.]+$')
+        new_array = []
+    
+        for value in array:
+            value = value.strip()
+            result = is_numberic.match(value)
+            if result:
+                if type(eval(value)) == int:
+                    value= int(value)
+                else :
+                    value= float(value)
+            new_array.append(value)
+        dictionary[key] = new_array
+    return dictionary
+
 def is_writeable(path, check_parent=False):
     '''
     Check if a given path is writeable by the current user.

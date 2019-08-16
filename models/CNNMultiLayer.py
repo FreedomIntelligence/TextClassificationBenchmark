@@ -6,9 +6,10 @@ import torch.nn.functional as F
 
 
 #https://github.com/zachAlbus/pyTorch-text-classification/blob/master/Zhang/model.py
-class MultiLayerCNN(nn.Module):
+from models.BaseModel import BaseModel
+class MultiLayerCNN(BaseModel):
     def __init__(self, opt):
-        super(MultiLayerCNN, self).__init__()
+        super(MultiLayerCNN, self).__init__(opt)
         self.embed = nn.Embedding(opt.vocab_size + 1, opt.embedding_dim)
         
         if opt.__dict__.get("embeddings",None) is not None:

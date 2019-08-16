@@ -5,12 +5,12 @@ import torch.nn.functional as F
 import torch
 from torch.autograd import Variable
 #from memory_profiler import profile
-
-class LSTMClassifier(nn.Module):
+from models.BaseModel import BaseModel
+class LSTMClassifier(BaseModel):
     # embedding_dim, hidden_dim, vocab_size, label_size, batch_size, use_gpu
     def __init__(self,opt):
         self.opt=opt
-        super(LSTMClassifier, self).__init__()
+        super(LSTMClassifier, self).__init__(opt)
         self.hidden_dim = opt.hidden_dim
         self.batch_size = opt.batch_size
         self.use_gpu = torch.cuda.is_available()
@@ -21,7 +21,7 @@ class LSTMClassifier(nn.Module):
         self.lstm = nn.LSTM(opt.embedding_dim, opt.hidden_dim)
         self.hidden2label = nn.Linear(opt.hidden_dim, opt.label_size)
         self.hidden = self.init_hidden()
-        self.mean = opt.__dict__.get("lstm_mean",True) 
+        self.lsmt_reduce_by_mean = opt.__dict__.get("lstm_mean",True) 
 
     def init_hidden(self,batch_size=None):
         if batch_size is None:
@@ -42,13 +42,14 @@ class LSTMClassifier(nn.Module):
         x=embeds.permute(1,0,2) #200x64x300
         self.hidden= self.init_hidden(sentence.size()[0]) #1x64x128
         lstm_out, self.hidden = self.lstm(x, self.hidden) #200x64x128
-        if self.mean=="mean":
+        if self.lsmt_reduce_by_mean=="mean":
             out = lstm_out.permute(1,0,2)
             final = torch.mean(out,1)
         else:
             final=lstm_out[-1]
         y  = self.hidden2label(final)  #64x3
         return y
+
 #    def forward1(self, sentence):
 #       
 #        return torch.zeros(sentence.size()[0], self.opt.label_size)

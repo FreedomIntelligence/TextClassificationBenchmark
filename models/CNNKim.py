@@ -2,10 +2,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-
-class KIMCNN1D(nn.Module):
+from models.BaseModel import BaseModel
+class KIMCNN1D(BaseModel):
     def __init__(self, opt):
-        super(KIMCNN1D, self).__init__()
+        super(KIMCNN1D, self).__init__(opt)
 
         self.embedding_type = opt.embedding_type
         self.batch_size = opt.batch_size
@@ -21,7 +21,7 @@ class KIMCNN1D(nn.Module):
         assert (len(self.kernel_sizes) == len(self.kernel_nums))
 
         # one for UNK and one for zero padding
-        self.embedding = nn.Embedding(self.vocab_size + 2, self.embedding_dim, padding_idx=self.vocab_size + 1)
+        self.embedding = nn.Embedding(self.vocab_size + 2, self.embedding_dim) #, padding_idx=self.vocab_size + 1
         if self.embedding_type == "static" or self.embedding_type == "non-static" or self.embedding_type == "multichannel":
             self.embedding.weight=nn.Parameter(opt.embeddings)            
             if self.embedding_type == "static":
@@ -39,7 +39,10 @@ class KIMCNN1D(nn.Module):
 #            setattr(self, 'conv_%d'%i, conv)
         self.convs = nn.ModuleList([nn.Conv1d(self.in_channel, num, self.embedding_dim * size, stride=self.embedding_dim) for size,num in zip(opt.kernel_sizes,opt.kernel_nums)])
         self.fc = nn.Linear(sum(self.kernel_nums), self.label_size)
-
+        self.properties.update(
+                {"kernel_sizes":self.kernel_sizes,
+                 "kernel_nums":self.kernel_nums,
+                })
     def get_conv(self, i):
         return getattr(self, 'conv_%d'%i)
 
@@ -81,7 +84,7 @@ class  KIMCNN2D(nn.Module):
         self.kernel_nums = opt.kernel_nums        
         self.keep_dropout = opt.keep_dropout
         
-        self.embedding = nn.Embedding(self.vocab_size + 2, self.embedding_dim, padding_idx=self.vocab_size + 1)
+        self.embedding = nn.Embedding(self.vocab_size + 2, self.embedding_dim) # padding_idx=self.vocab_size + 1
         if self.embedding_type == "static" or self.embedding_type == "non-static" or self.embedding_type == "multichannel":
             self.embedding.weight=nn.Parameter(opt.embeddings)            
             if self.embedding_type == "static":
@@ -133,3 +136,18 @@ class  KIMCNN2D(nn.Module):
         logit = self.fc(x) # (N,C)
         return logit
 
+if __name__ == '__main__':
+    import sys
+    sys.path.append(r"..")
+    import opts
+    import torch as t
+    opt=opts.parse_opt()
+    import dataHelper 
+    train_iter, test_iter = dataHelper.loadData(opt)
+    m = KIMCNN2D(opt)
+
+
+    content = t.autograd.Variable(t.arange(0,2500).view(10,250)).long()
+    o = m(content)
+    print(o.size())
+    path = m.save()

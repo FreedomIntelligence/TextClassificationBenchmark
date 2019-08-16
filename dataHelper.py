@@ -9,7 +9,6 @@ from tqdm import tqdm
 import random
 import time
 from utils import log_time_delta
-from tqdm import tqdm
 from dataloader import Dataset
 import torch
 from torch.autograd import Variable

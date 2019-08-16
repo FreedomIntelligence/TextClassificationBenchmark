@@ -5,9 +5,10 @@ import torch as t
 import numpy as np
 from torch import nn
 from collections import OrderedDict
-class FastText(nn.Module):
+from models.BaseModel import BaseModel
+class FastText(BaseModel):
     def __init__(self, opt ):
-        super(FastText, self).__init__()
+        super(FastText, self).__init__(opt)
         self.model_name = 'FastText'
         
         linear_hidden_size=getattr(opt,"linear_hidden_size",2000)
@@ -26,7 +27,10 @@ class FastText(nn.Module):
             # nn.ReLU(inplace=True),
             nn.Linear(linear_hidden_size,opt.label_size)
         )
-
+#        self.fc = nn.Linear(300, opt.label_size)
+        self.properties.update(
+                {"linear_hidden_size":linear_hidden_size
+                })
  
     def forward(self,content):
        

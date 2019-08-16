@@ -6,7 +6,7 @@ import torch
 import numpy as np
 from torch import nn
 from collections import OrderedDict
-
+from models.BaseModel import BaseModel
 class Inception(nn.Module):
     def __init__(self,cin,co,relu=True,norm=True):
         super(Inception, self).__init__()
@@ -41,12 +41,12 @@ class Inception(nn.Module):
         branch4=self.branch4(x)
         result=self.activa(torch.cat((branch1,branch2,branch3,branch4),1))
         return result
-class CNNText_inception(nn.Module):
+class CNNText_inception(BaseModel):
     def __init__(self, opt ):
-        super(CNNText_inception, self).__init__()   
+        super(CNNText_inception, self).__init__(opt)   
         incept_dim=getattr(opt,"inception_dim",512)
         self.model_name = 'CNNText_inception'
-        self.opt=opt
+
         self.encoder = nn.Embedding(opt.vocab_size,opt.embedding_dim)
 
         self.content_conv=nn.Sequential(
@@ -55,15 +55,20 @@ class CNNText_inception(nn.Module):
             Inception(incept_dim,incept_dim),
             nn.MaxPool1d(opt.max_seq_len)
         )
+        opt.hidden_size = getattr(opt,"linear_hidden_size",2000)
         self.fc = nn.Sequential(
-            nn.Linear(incept_dim,getattr(opt,"linear_hidden_size",2000)),
-            nn.BatchNorm1d(getattr(opt,"linear_hidden_size",2000)),
+            nn.Linear(incept_dim,opt.hidden_size),
+            nn.BatchNorm1d(opt.hidden_size),
             nn.ReLU(inplace=True),
-            nn.Linear(getattr(opt,"linear_hidden_size",2000) ,opt.label_size)
+            nn.Linear(opt.hidden_size ,opt.label_size)
         )
         if opt.__dict__.get("embeddings",None) is not None:
             print('load embedding')
             self.encoder.weight.data.copy_(t.from_numpy(opt.embeddings))
+        self.properties.update(
+                {"inception_dim":incept_dim,
+                 "hidden_size":opt.hidden_size,
+                })
  
     def forward(self,content):
      

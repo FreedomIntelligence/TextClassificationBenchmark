@@ -3,12 +3,12 @@ import torch.nn.functional as F
 import torch
 from torch.autograd import Variable
 #from memory_profiler import profile
-
-class RNN_CNN(nn.Module):
+from models.BaseModel import BaseModel
+class RNN_CNN(BaseModel):
     # embedding_dim, hidden_dim, vocab_size, label_size, batch_size, use_gpu
     def __init__(self,opt):
         self.opt=opt
-        super(RNN_CNN, self).__init__()
+        super(RNN_CNN, self).__init__(opt)
         self.hidden_dim = opt.hidden_dim
         self.batch_size = opt.batch_size
         self.use_gpu = torch.cuda.is_available()
@@ -23,6 +23,9 @@ class RNN_CNN(nn.Module):
         self.content_dim = 256
         self.conv =  nn.Conv1d(in_channels=opt.hidden_dim, out_channels=self.content_dim, kernel_size=opt.hidden_dim * 2, stride=opt.embedding_dim)
         self.hidden2label = nn.Linear(self.content_dim, opt.label_size)
+        self.properties.update(
+                {"content_dim":self.content_dim,
+                })
 
     def init_hidden(self,batch_size=None):
         if batch_size is None:

@@ -2,12 +2,11 @@
 import torch as t
 import numpy as np
 from torch import nn
-
-class BasicCNN1D(nn.Module): 
+from models.BaseModel import BaseModel
+class BasicCNN1D(BaseModel): 
     def __init__(self, opt ):
-        super(BasicCNN1D, self).__init__()
+        super(BasicCNN1D, self).__init__(opt)
         self.model_name = 'CNNText'
-        self.opt=opt
         self.content_dim=opt.__dict__.get("content_dim",256)
         self.kernel_size=opt.__dict__.get("kernel_size",3)
 
@@ -25,6 +24,10 @@ class BasicCNN1D(nn.Module):
 #            nn.AdaptiveMaxPool1d()
         )
         self.fc = nn.Linear(self.content_dim, opt.label_size)
+        self.properties.update(
+                {"content_dim":self.content_dim,
+                 "kernel_size":self.kernel_size,
+                })
 
     def forward(self,  content):
 
@@ -33,14 +36,15 @@ class BasicCNN1D(nn.Module):
         reshaped = content_out.view(content_out.size(0), -1) #64x256
         logits = self.fc(reshaped) #64x3
         return logits
-class BasicCNN2D(nn.Module):
+
+from models.BaseModel import BaseModel
+class BasicCNN2D(BaseModel):
     """
     A CNN for text classification.
     Uses an embedding layer, followed by a convolutional, max-pooling and softmax layer.
     """
     def __init__(self, args):
-        super(BasicCNN2D, self).__init__()
-        self.opt = opt
+        super(BasicCNN2D, self).__init__(opt)
 
         self.embedding_dim = opt.embedding_dim
         self.vocab_size = opt.vocab_size
@@ -59,7 +63,11 @@ class BasicCNN2D(nn.Module):
 
         self.dropout = nn.Dropout(self.keep_dropout)
         self.fc = nn.Linear(len(self.kernel_sizes) * self.out_channel, self.label_size)
-
+        
+        self.properties.update(
+                {"kernel_nums":self.kernel_nums,
+                 "kernel_sizes":self.kernel_sizes,
+                })
 
     def forward(self, input_x):
         """

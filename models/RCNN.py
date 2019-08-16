@@ -7,12 +7,12 @@ from torch.autograd import Variable
 """
 Lai S, Xu L, Liu K, et al. Recurrent Convolutional Neural Networks for Text Classification[C]//AAAI. 2015, 333: 2267-2273.
 """
-
-class RCNN(nn.Module):
+from models.BaseModel import BaseModel
+class RCNN(BaseModel):
     # embedding_dim, hidden_dim, vocab_size, label_size, batch_size, use_gpu
     def __init__(self,opt):
         self.opt=opt
-        super(RCNN, self).__init__()
+        super(RCNN, self).__init__(opt)
         self.hidden_dim = opt.hidden_dim
         self.batch_size = opt.batch_size
         self.use_gpu = torch.cuda.is_available()
@@ -34,6 +34,7 @@ class RCNN(nn.Module):
         self.content_dim = 256
         #self.conv =  nn.Conv1d(opt.hidden_dim, self.content_dim, opt.hidden_dim * 2, stride=opt.embedding_dim)
         self.hidden2label = nn.Linear( (2*opt.hidden_dim // 2+opt.embedding_dim), opt.label_size)
+        
 
     def init_hidden(self,batch_size=None):
         if batch_size is None:
