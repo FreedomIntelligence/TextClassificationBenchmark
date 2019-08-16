@@ -85,26 +85,6 @@ def train(opt,train_iter, test_iter,verbose=True):
     logger.info(model_info +" with time :"+ str( time.time()-global_start)+" ->" +str( max(percisions) ) )
     print(model_info +" with time :"+ str( time.time()-global_start)+" ->" +str( max(percisions) ) )
 
-def main():
-    from_torchtext = False
-    if "CUDA_VISIBLE_DEVICES" not in os.environ.keys():
-        os.environ["CUDA_VISIBLE_DEVICES"] =opt.gpu
-    #opt.model ='lstm'
-    #opt.model ='capsule'    
-    if from_torchtext:
-        train_iter, test_iter = utils.loadData(opt)
-    else:
-        import dataHelper 
-        train_iter, test_iter = dataHelper.loadData(opt)
-
-    model=models.setup(opt)
-    print(opt.model)
-    if torch.cuda.is_available():
-        model.cuda()
-    
-
-    
-    train(opt,train_iter, test_iter)
         
 if __name__=="__main__": 
     parameter_pools = utils.parse_grid_parameters("config/grid_search_cnn.ini")
