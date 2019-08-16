@@ -17,11 +17,11 @@ class BaseModel(nn.Module):
             self.encoder.weight=nn.Parameter(opt.embeddings,requires_grad=opt.embedding_training)
         self.fc = nn.Linear(opt.embedding_dim, opt.label_size)
         
-        print(self.__class__.__name__)
+
         self.properties = {"model_name":self.__class__.__name__,
-                "embedding_dim":self.opt.embedding_dim,
-                "embedding_training":self.opt.embedding_training,
-                "max_seq_len":self.opt.max_seq_len,
+#                "embedding_dim":self.opt.embedding_dim,
+#                "embedding_training":self.opt.embedding_training,
+#                "max_seq_len":self.opt.max_seq_len,
                 "batch_size":self.opt.batch_size,
                 "learning_rate":self.opt.learning_rate,
                 "keep_dropout":self.opt.keep_dropout,
@@ -39,7 +39,7 @@ class BaseModel(nn.Module):
             os.mkdir(save_dir)
         self.model_info = "__".join([k+"_"+str(v) if type(v)!=list else k+"_"+str(v)[1:-1].replace(",","_").replace(",","")  for k,v in self.properties.items() ])
         if metric:
-            path = os.path.join(save_dir, str(metric) +"__"+ self.model_info)
+            path = os.path.join(save_dir, str(metric)[2:] +"_"+ self.model_info)
         else:
             path = os.path.join(save_dir,self.model_info)
         t.save(self,path)

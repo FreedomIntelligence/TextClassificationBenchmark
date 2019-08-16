@@ -29,7 +29,7 @@ class LSTMBI(BaseModel):
                 {"hidden_dim":self.opt.hidden_dim,
                  "lstm_mean":self.lsmt_reduce_by_mean,
                  "lstm_layers":self.opt.lstm_layers,
-                 "bidirectional":str(self.opt.bidirectional)
+#                 "bidirectional":str(self.opt.bidirectional)
                 })
 
     def init_hidden(self,batch_size=None):
