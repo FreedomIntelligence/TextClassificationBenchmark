@@ -26,7 +26,7 @@ class LSTMBI(BaseModel):
         
         
         self.properties.update(
-                {"model_name":self.opt.hidden_dim,
+                {"hidden_dim":self.opt.hidden_dim,
                  "lstm_mean":self.lsmt_reduce_by_mean,
                  "lstm_layers":self.opt.lstm_layers,
                  "bidirectional":str(self.opt.bidirectional)

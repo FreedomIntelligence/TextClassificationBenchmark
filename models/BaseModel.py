@@ -17,6 +17,7 @@ class BaseModel(nn.Module):
             self.encoder.weight=nn.Parameter(opt.embeddings,requires_grad=opt.embedding_training)
         self.fc = nn.Linear(opt.embedding_dim, opt.label_size)
         
+        print(self.__class__.__name__)
         self.properties = {"model_name":self.__class__.__name__,
                 "embedding_dim":self.opt.embedding_dim,
                 "embedding_training":self.opt.embedding_training,
