@@ -9,7 +9,7 @@ from models.BaseModel import BaseModel
 class LSTMClassifier(BaseModel):
     # embedding_dim, hidden_dim, vocab_size, label_size, batch_size, use_gpu
     def __init__(self,opt):
-        self.opt=opt
+
         super(LSTMClassifier, self).__init__(opt)
         self.hidden_dim = opt.hidden_dim
         self.batch_size = opt.batch_size

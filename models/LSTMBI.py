@@ -10,7 +10,7 @@ class LSTMBI(BaseModel):
     # embedding_dim, hidden_dim, vocab_size, label_size, batch_size, use_gpu
     def __init__(self,opt):
         super(LSTMBI, self).__init__(opt)
-        self.model_name = 'lstm'
+
 
         self.word_embeddings = nn.Embedding(opt.vocab_size, opt.embedding_dim)
         self.word_embeddings.weight = nn.Parameter(opt.embeddings,requires_grad=opt.embedding_training)

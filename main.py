@@ -45,13 +45,14 @@ def train(opt,train_iter, test_iter,verbose=True):
     
     model.train()
     optimizer = utils.getOptimizer(params,name=opt.optimizer, lr=opt.learning_rate,scheduler= utils.get_lr_scheduler(opt.lr_scheduler))
-    optimizer.zero_grad()
+
     loss_fun = F.cross_entropy
 
     filename = None
     percisions=[]
     for i in range(opt.max_epoch):
         for epoch,batch in enumerate(train_iter):
+            optimizer.zero_grad()
             start= time.time()
             
             text = batch.text[0] if opt.from_torchtext else batch.text

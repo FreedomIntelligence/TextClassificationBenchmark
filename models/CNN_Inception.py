@@ -45,7 +45,7 @@ class CNNText_inception(BaseModel):
     def __init__(self, opt ):
         super(CNNText_inception, self).__init__(opt)   
         incept_dim=getattr(opt,"inception_dim",512)
-        self.model_name = 'CNNText_inception'
+
 
         self.encoder = nn.Embedding(opt.vocab_size,opt.embedding_dim)
 

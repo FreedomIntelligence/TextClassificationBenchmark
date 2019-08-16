@@ -8,7 +8,7 @@ from torch.autograd import Variable
 from models.BaseModel import BaseModel
 class LSTMAttention(torch.nn.Module):
     def __init__(self,opt):
-        self.opt=opt
+
         super(LSTMAttention, self).__init__()
         self.hidden_dim = opt.hidden_dim
         self.batch_size = opt.batch_size

@@ -9,7 +9,6 @@ from models.BaseModel import BaseModel
 class FastText(BaseModel):
     def __init__(self, opt ):
         super(FastText, self).__init__(opt)
-        self.model_name = 'FastText'
         
         linear_hidden_size=getattr(opt,"linear_hidden_size",2000)
         self.encoder = nn.Embedding(opt.vocab_size,opt.embedding_dim)

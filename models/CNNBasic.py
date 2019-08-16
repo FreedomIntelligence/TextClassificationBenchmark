@@ -6,7 +6,7 @@ from models.BaseModel import BaseModel
 class BasicCNN1D(BaseModel): 
     def __init__(self, opt ):
         super(BasicCNN1D, self).__init__(opt)
-        self.model_name = 'CNNText'
+
         self.content_dim=opt.__dict__.get("content_dim",256)
         self.kernel_size=opt.__dict__.get("kernel_size",3)
 
